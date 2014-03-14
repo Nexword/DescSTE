@@ -1,0 +1,57 @@
+<content-set id='QAN#001'>
+	<content-block id='N#001' layout='typeA'>
+		<text id='T#001' url='text#1' />
+		<text id='T#0012' url='text#2' />			
+	</content-block>
+	<content-block id='N#002' layout='typeA'>
+		<text id='T#002' url='text#3' />			
+	</content-block>
+	<content-block id='Q#001' layout='typeA'>
+		<text id='T#003' url='text#4' />			
+	</content-block>
+	<content-block id='Q#002' layout='typeA'>
+		<text id='T#004' url='text#5' />			
+	</content-block>
+	<content-block id='Q#003' layout='typeA'>
+		<text id='T#005' url='text#6' />			
+	</content-block>
+	<content-block id='Q#004' layout='typeA'>
+		<text id='T#006' url='text#7' />			
+	</content-block>
+	<content-block id='A#001#001' layout='typeA'>
+		<text id='T#007' url='text#8' />			
+	</content-block>
+	<content-block id='A#001#002' layout='typeA'>
+		<text id='T#008' url='text#9' />				
+	</content-block>
+	<content-block id='A#001#003' layout='typeA'>
+		<text id='T#009' url='text#10' />			
+	</content-block>
+	<content-block id='A#002#001' layout='typeA'>
+		<text id='T#010' url='text#11' />				
+	</content-block>
+	<content-block id='A#002#002' layout='typeA'>
+		<text id='T#011' url='text#12' />			
+	</content-block>
+	<content-block id='A#002#003' layout='typeA'>
+		<text id='T#012' url='text#13' />			
+	</content-block>
+	<content-block id='A#002#004' layout='typeA'>
+		<text id='T#013' url='text#14' />			
+	</content-block>
+	<content-block id='A#003#001' layout='typeA'>
+		<text id='T#014' url='text#15' />			
+	</content-block>
+	<content-block id='A#004#001' layout='typeA'>
+		<text id='T#015' url='text#16' />			
+	</content-block>
+	<content-block id='A#004#002' layout='typeA'>
+		<text id='T#016' url='text#17' />			
+	</content-block>
+	<content-block id='A#004#003' layout='typeA'>
+		<text id='T#017' url='text#18' />			
+	</content-block>
+	<content-block id='A#004#004' layout='typeA'>
+		<text id='T#018' url='text#19' />			
+	</content-block>
+</content-set>

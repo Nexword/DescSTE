@@ -1,0 +1,5 @@
+D:\STE\STEPresenter\STEDataLoad\bin\Debug\STEDataLoad.dll
+D:\STE\STEPresenter\STEDataLoad\bin\Debug\STEDataLoad.pdb
+D:\STE\STEPresenter\STEDataLoad\obj\Debug\STEDataAccessLayer.csprojResolveAssemblyReference.cache
+D:\STE\STEPresenter\STEDataLoad\obj\Debug\STEDataLoad.dll
+D:\STE\STEPresenter\STEDataLoad\obj\Debug\STEDataLoad.pdb

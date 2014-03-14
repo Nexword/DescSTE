@@ -1,0 +1,17 @@
+D:\STE\STEPresenter\STEPresenter\bin\Debug\STEPresenter.exe.config
+D:\STE\STEPresenter\STEPresenter\obj\Debug\STEPresenter.csprojResolveAssemblyReference.cache
+D:\STE\STEPresenter\STEPresenter\obj\Debug\MainWindow.baml
+D:\STE\STEPresenter\STEPresenter\obj\Debug\MainWindow.g.cs
+D:\STE\STEPresenter\STEPresenter\obj\Debug\App.g.cs
+D:\STE\STEPresenter\STEPresenter\obj\Debug\STEPresenter_MarkupCompile.cache
+D:\STE\STEPresenter\STEPresenter\obj\Debug\STEPresenter.g.resources
+D:\STE\STEPresenter\STEPresenter\obj\Debug\STEPresenter.csproj.GenerateResource.Cache
+D:\STE\STEPresenter\STEPresenter\obj\Debug\STE.Properties.Resources.resources
+D:\STE\STEPresenter\STEPresenter\bin\Debug\STEPresenter.exe
+D:\STE\STEPresenter\STEPresenter\bin\Debug\STEPresenter.pdb
+D:\STE\STEPresenter\STEPresenter\bin\Debug\STEDataLoad.dll
+D:\STE\STEPresenter\STEPresenter\bin\Debug\STEProcessor.dll
+D:\STE\STEPresenter\STEPresenter\bin\Debug\STEDataLoad.pdb
+D:\STE\STEPresenter\STEPresenter\bin\Debug\STEProcessor.pdb
+D:\STE\STEPresenter\STEPresenter\obj\Debug\STEPresenter.exe
+D:\STE\STEPresenter\STEPresenter\obj\Debug\STEPresenter.pdb

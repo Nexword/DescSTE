@@ -1,0 +1,5 @@
+D:\STE\STEPresenter\STEProcessor\obj\Debug\STEProcessor.csprojResolveAssemblyReference.cache
+D:\STE\STEPresenter\STEProcessor\bin\Debug\STEProcessor.dll
+D:\STE\STEPresenter\STEProcessor\bin\Debug\STEProcessor.pdb
+D:\STE\STEPresenter\STEProcessor\obj\Debug\STEProcessor.dll
+D:\STE\STEPresenter\STEProcessor\obj\Debug\STEProcessor.pdb

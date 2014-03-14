@@ -1,0 +1,35 @@
+<task-set id='KS#001'>
+	<task id='K#001#001'>
+		<question key='Q#001' />
+		<single-answer>
+			<option key='A#001#001' />
+			<option key='A#001#002' />
+			<option key='A#001#003' />
+		</single-answer>
+	</task>
+	<task id='K#001#002'>
+		<question key='Q#002' />
+		<multiple-answer>
+			<option key='A#002#001' />
+			<option key='A#002#002' />
+			<option key='A#002#003' />
+			<option key='A#002#004' />
+		</multiple-answer>
+	</task>
+	<task id='K#002#001'>
+		<question key='Q#003' />
+		<open-answer>
+			<open-option key='A#003#001' />
+		</open-answer>
+	</task>
+		<task id='K#002#002'>
+		<question key='Q#004' />
+		<single-semiopen-answer>
+			<option key='A#004#001' />
+			<option key='A#004#002' />
+			<option key='A#004#003' />
+			<option key='A#004#004' />
+			<open-option key='A#004#005' />
+		</single-semiopen-answer>
+	</task>	
+</task-set>

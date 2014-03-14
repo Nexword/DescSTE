@@ -1,0 +1,44 @@
+1- 4
+2- 1
+3- 1
+4- 3
+5- 4
+6- string
+7- 1
+8- string
+9- boolean
+10- 	à-integer
+	á-real
+	â-integer
+	ã-integer
+	ä-real
+	å-real
+11- 4
+12- 4,5
+13- 3,6
+14- integer, integer, integer
+15- integer real real
+16- integer integer integer
+17- y=9
+18- y=5
+19- y=4
+20- Y=’001110’
+21- Y=’êàòåğà’
+22- Y=’1112212’
+23- Y=’íàñîñ’
+24- Õ=0 
+25- Y=’î’
+26- Y=-8
+27- Y=’e’
+28- Y=’a’
+29- A: integer B: integer C: string D: char
+30- 	1-â
+	2-â
+	3-á
+	4-ã
+	5-ã
+	6-á
+	7-â
+	8-â
+	9-à
+

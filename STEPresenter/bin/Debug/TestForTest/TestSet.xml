@@ -1,0 +1,14 @@
+<test-set id='TS#001'>
+	<test id='T#001#001'>
+		<note key='N#001' />
+		<block id='B#001#001#001'>
+			<note key='N#002' />
+			<task key='K#001#001' />	
+			<task key='K#001#002' />
+		</block>		
+		<block id='B#001#001#002'>
+			<task key='K#002#001' />	
+			<task key='K#002#002' />
+		</block>
+	</test>
+</test-set>
