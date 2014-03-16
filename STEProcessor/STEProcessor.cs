@@ -55,7 +55,7 @@ namespace STE
                         sElement = @"<Image Height='400' Width='400' Source='pack://siteoforigin:,,,/" + pairs[i].url + "' />";
                         break;
                     case "video":
-                        sElement = @"<MediaElement Height='Auto' Margin='10' Width='Auto' MaxWidth='800' MaxHeight='600' Source='pack://siteoforigin:,,,/" + pairs[i].url + "' />";
+                        sElement = @"<MediaElement Height='Auto' MaxWidth='800' MaxHeight='600'  Margin='5' Width='Auto' Source='pack://siteoforigin:,,,/" + pairs[i].url + "' />";
                         break;
                     case "audio":
                         sElement = @"<MediaElement Height='Auto' Width='Auto' Source='pack://siteoforigin:,,,/" + pairs[i].url + "' />";
@@ -139,7 +139,6 @@ namespace STE
             foreach (XmlNode node in testNodes)
             {
                 if (node.Name == "note") pages.Add(CreateTestNotePage(node, xmlContentSet));
-                //  if (node.Name == "block") pages.Concat(CreateTestPages(node,xmlTask, xmlContent));
                 if (node.Name == "block") pages.AddRange(CreateTestPages(node, xmlTaskSet, xmlContentSet));
 
             }
@@ -246,10 +245,12 @@ namespace STE
         {
             List<string> sOptionElements = new List<string>();
             string sSingleAnswerElement = "";
+            string keyOption = "";
             foreach(XmlNode option in node.ChildNodes)
             {
-                sOptionElements.Add(CreateContentBlock(option.Attributes.GetNamedItem("key").Value, xmlContent));
-                sSingleAnswerElement += "<RadioButton> "+ sOptionElements.Last()+ " </RadioButton>";
+                keyOption = option.Attributes.GetNamedItem("key").Value;
+                sOptionElements.Add(CreateContentBlock(keyOption, xmlContent));
+                sSingleAnswerElement += "<RadioButton " + "Tag='"+ keyOption + "'> "+ sOptionElements.Last()+ " </RadioButton>";
             }
 
             return @"<GroupBox>
@@ -268,10 +269,12 @@ namespace STE
 
             List<string> sOptionElements = new List<string>();
             string sMultipleAnswerElement = "";
+            string keyOption = "";
             foreach (XmlNode option in node.ChildNodes)
             {
-                sOptionElements.Add(CreateContentBlock(option.Attributes.GetNamedItem("key").Value, xmlContent));
-                sMultipleAnswerElement += "<CheckBox> " + sOptionElements.Last() + " </CheckBox>";
+                keyOption = option.Attributes.GetNamedItem("key").Value;
+                sOptionElements.Add(CreateContentBlock(keyOption, xmlContent));
+                sMultipleAnswerElement += "<CheckBox "+"Tag='"+keyOption+"'>" + sOptionElements.Last() + " </CheckBox>";
             }
 
             return @"<GroupBox>
@@ -323,13 +326,6 @@ namespace STE
             string MatchingAnswerElement = "";
             return MatchingAnswerElement;
         }
-
-        public void LeadToXAML(List<string> sElements)
-        {
-
-        }
-
-
     }
    
 }

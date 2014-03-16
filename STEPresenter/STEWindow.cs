@@ -16,6 +16,7 @@ namespace STE
         public List<StackPanel> testPages;
         public StackPanel mainStackPanel;
         public WrapPanel buttonWrapPanel;
+        public Grid userControlGrid;
         private int currentPage;
         public static STEWindow LoadWindowFromXaml()
         {
@@ -32,11 +33,28 @@ namespace STE
             <RowDefinition Height='40*'>
             </RowDefinition>
         </Grid.RowDefinitions>
-		<ScrollViewer Grid.Column='1' Grid.Row='1' VerticalScrollBarVisibility='Auto' >
-			<WrapPanel Name='ButtonWrapPanel' Grid.Column='1' Grid.Row='1' Margin='5' >
+    <Grid Name='UserControlGrid' Margin='0' ShowGridLines='True' Grid.Row='1'>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width='400*'></ColumnDefinition>
+                <ColumnDefinition Width='80*'></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+        <ScrollViewer Grid.Column='1' VerticalScrollBarVisibility='Auto'>
+                <WrapPanel Orientation='Vertical'>
+                    <TextBox Name='TimeTextBox' TextAlignment='Center' Width='Auto'>
+                        14:55:22
+                    </TextBox>
+                    <WrapPanel Orientation='Horizontal'>
+                        <Button Name='PreviousButton' Click='PreviousButtonClick'>Предыдущее</Button>
+                        <Button Name='NextButton' Click='NextButtonClick'>Следующее</Button>
+                        <Button Name='EndTest' Click='EndTestClick'>Закончить</Button>
+                    </WrapPanel>
+                </WrapPanel>
+            </ScrollViewer>
+		<ScrollViewer Grid.Column='0' Grid.Row='1' VerticalScrollBarVisibility='Auto' >
+			<WrapPanel Name='ButtonWrapPanel' Grid.Column='0' Grid.Row='1' Margin='5' >
 			</WrapPanel>
 		</ScrollViewer>
-	
+	</Grid>
 		<ScrollViewer VerticalScrollBarVisibility='Auto' >
             <StackPanel Name='MainStackPanel' Width='Auto' >
 			</StackPanel>
@@ -56,7 +74,6 @@ namespace STE
                 Button myButton = new Button();
                 myButton.Content = i + 1;
                 myButton.MinWidth = 75;
-                //myButton.Click += Button_Click1;
                 int pageNumber = i;
                 myButton.Click +=  new RoutedEventHandler(
                     delegate(object sender, RoutedEventArgs e) 
@@ -69,14 +86,37 @@ namespace STE
             }
         }
 
+        public void CreateUserControlElements()
+        {
+            Button myEndTestButton = new Button();
+            Button myNextButton = new Button();
+            Button myPreviousButton = new Button();
+            myEndTestButton.Content = "Закночить тестирование";
+            myEndTestButton.SetValue(Grid.ColumnProperty, 1);
+            userControlGrid.Children.Add(myEndTestButton);
+            
+        }
+
         public void CreateMainElements()
         {
             mainStackPanel = (StackPanel)this.FindName("MainStackPanel");
             buttonWrapPanel = (WrapPanel)this.FindName("ButtonWrapPanel");
             CreateWrapPanelButtons();
+            
         }
 
-
+        private void PreviousButtonClick(object sender, RoutedEventArgs e)
+        {
+            CurrentPage = CurrentPage - 1;
+        }
+        private void NextButtonClick(object sender, RoutedEventArgs e)
+        {
+            CurrentPage = CurrentPage + 1;
+        }
+        private void EndTestClick(object sender, RoutedEventArgs e)
+        {
+ 
+        }
 
         public int CurrentPage
         {
@@ -87,9 +127,12 @@ namespace STE
 
             set
             {
-                currentPage = value;
-                mainStackPanel.Children.Clear();
-                mainStackPanel.Children.Add(testPages[value]);
+                if (value >= 0 && value < testPages.Count)
+                {
+                    currentPage = value;
+                    mainStackPanel.Children.Clear();
+                    mainStackPanel.Children.Add(testPages[value]);
+                }
             }
         }
     }
