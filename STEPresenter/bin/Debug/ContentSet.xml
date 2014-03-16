@@ -1,6 +1,8 @@
 <content-set id='QAN#001'>
 	<content-block id='Q#001' layout='typeA'>
 		<text id='T#001' url='text#1' />			
+		<video id='V#002' url='demo.wmv' />	
+		<video id='V#003' url='demo.wmv' />	
 	</content-block>
 	<content-block id='A#001#001' layout='typeA'>
 		<text id='T#002' url='text#2' />			

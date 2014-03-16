@@ -13,69 +13,115 @@ namespace STE
         List<string> CreatePages(XmlNode test, XmlDocument xmlTaskSet, XmlDocument xmlContentSet);
     }
 
-    public  class STEProcessor:ISTEProcessor
+    public class Layouts
     {
-       
-        public List<string> contentStrings;//переменная для хранения контента. Обращение к контенту происходит в разных частях программы
-        
-       /// <summary>
-       /// Ищем содержимое по нашему id во внешнем файле xmlContent
-       /// </summary>
-       /// <param name="id"></param>
-       /// <param name="xmlContent"></param>
-       /// <returns>Возвращает XAML описание содержащегося контента</returns>
-        public List<string> FindContentById(string id, XmlDocument xmlContent)
+        public delegate string TypeLayout(List<STEProcessor.PairURLType> pairs);
+        public Dictionary<string, TypeLayout> MakeLayout;
+
+        public Layouts()
         {
-            List<string> cString = new List<string>();
-            string itemUrl, itemId;
-            XmlNode contentBlock = xmlContent.SelectSingleNode(String.Format("//content-set//content-block[@id='{0}']",id));
-            foreach(XmlNode contentItem in contentBlock.ChildNodes)
-            {
-                itemId = contentItem.Attributes.GetNamedItem("id").Value;
-                itemUrl = contentItem.Attributes.GetNamedItem("url").Value;
-                //cString.Add(CreateBaseContentElement(url, itemName));
-                ///Зачем это здесь ? rowPosition++;
-                string sElement = "";
-                switch (contentItem.Name)
-                {
-                    case "text": 
-                        sElement = GetTextFromFile(itemUrl); 
-                        sElement = @"<TextBlock FontSize='25' Margin='5' TextWrapping='Wrap'>" + sElement + "</TextBlock>"; 
-                        
-                        break;
-                    case "image":
-                        sElement = @"<Image Height='400' Width='400' Source='pack://siteoforigin:,,,/"+itemUrl+"' />";
-                        break;
-                    case "video":
-                        sElement = @"<MediaElement Height='600' Width='800' Source='pack://siteoforigin:,,,/" + itemUrl + "' />";
-                        break;
-                    case "audio": 
-                        sElement= @"<MediaElement Height='Auto' Width='Auto' Source='pack://siteoforigin:,,,/" + itemUrl + "' />"; 
-                        break;
+            MakeLayout=new Dictionary<string,TypeLayout>
+              {
+                {"typeA",new TypeLayout(CreateLayoutA) },
+                {"typeB",new TypeLayout(CreateLayoutB) },
 
-                }
-                cString.Add(sElement);
-            }
-
-            return cString;
+            };
         }
 
-        
-       
-        /// <summary>
-        /// Метод создает Textblock с содержимым из нужной строки в файле
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
         public string GetTextFromFile(string fileName)
         {
             int k = fileName.IndexOf('#');
             string fName = fileName.Substring(0, k) + ".txt";
             int strSkip = Convert.ToInt32(fileName.Substring(k + 1, fileName.Length - k - 1));
-            string note = File.ReadLines(fName).Skip(strSkip-1).First();
-            
+            string note = File.ReadLines(fName).Skip(strSkip - 1).First();
+
             return note;
         }
+
+        public string CreateLayoutA(List<STEProcessor.PairURLType> pairs)
+        {
+            string result = " <WrapPanel Orientation='Vertical'> ";         
+            for (int i = 0; i < pairs.Count;i++ )
+            {
+                string sElement = "";
+                switch (pairs[i].type)
+                {
+                   
+                    case "text":
+                        sElement = GetTextFromFile(pairs[i].url);
+                        sElement = @"<TextBlock FontSize='25' Margin='5' TextWrapping='Wrap'>" + sElement + "</TextBlock>";
+                        break;
+                    case "image":
+                        sElement = @"<Image Height='400' Width='400' Source='pack://siteoforigin:,,,/" + pairs[i].url + "' />";
+                        break;
+                    case "video":
+                        sElement = @"<MediaElement Height='Auto' Margin='10' Width='Auto' MaxWidth='800' MaxHeight='600' Source='pack://siteoforigin:,,,/" + pairs[i].url + "' />";
+                        break;
+                    case "audio":
+                        sElement = @"<MediaElement Height='Auto' Width='Auto' Source='pack://siteoforigin:,,,/" + pairs[i].url + "' />";
+                        break;
+                }
+                result += sElement+" ";
+            }
+            
+            return result + " </WrapPanel>"; 
+        }
+
+        public string CreateLayoutB(List<STEProcessor.PairURLType> pairs)
+        { return ""; }
+    
+    }
+ 
+
+    public  class STEProcessor:ISTEProcessor
+    {
+        Layouts layout = new Layouts();
+        
+        public struct PairURLType
+        {
+            public string url,type;
+        }
+        
+        /// <summary>
+        ///  Управляющий метод для создания блока контента. Содержит функцию формирования URL-ТИП,
+        /// функцию отрисовки всего блока контента по парам URL-ТИП
+        /// </summary>
+        /// <param name="id"> идентификатор контент блока</param>
+        /// <param name="xmlContent"> файл с описанием всех контент блоков</param>
+        public string CreateContentBlock(string id,XmlDocument xmlContent)
+        {
+            XmlNode contentBlock = xmlContent.SelectSingleNode(String.Format("//content-set//content-block[@id='{0}']", id));
+            string typeLayout = "";
+            string result="";
+            Layouts.TypeLayout DelegateMethod;
+            List<PairURLType> pairs;
+            pairs=GetUrlTypePairs(contentBlock);
+            typeLayout = contentBlock.Attributes.GetNamedItem("layout").Value;
+            layout.MakeLayout.TryGetValue(typeLayout, out DelegateMethod);
+            return result = DelegateMethod(pairs);
+        }
+
+        /// <summary>
+        ///  Формируем список пар URL-ТИП
+        /// </summary>
+        /// <param name="id">id content-block</param>
+        /// <param name="xmlContent"> файл со всеми content-blocks</param>
+        /// <returns>Функция возвращает список пар URL-ТИП</returns>
+        public List<PairURLType> GetUrlTypePairs(XmlNode contentBlock)
+        {
+            List<PairURLType> myPairsUrlType=new List<PairURLType>();
+            PairURLType pair;
+            foreach (XmlNode contentItem in contentBlock.ChildNodes)
+            {
+                pair.type=contentItem.Name;
+                pair.url = contentItem.Attributes.GetNamedItem("url").Value;
+                myPairsUrlType.Add(pair);
+            }
+                
+            return myPairsUrlType;
+        }
+
+
 
         /// <summary>
         /// Для каждого теста создается набор страниц, из которых он состоит. Позже страницы 
@@ -129,14 +175,12 @@ namespace STE
         /// <returns>Возвращает страницу с заметками к тесту</returns>
         public string CreateTestNotePage(XmlNode note, XmlDocument xmlContentSet)
         {
-            contentStrings = FindContentById(note.Attributes.GetNamedItem("key").Value, xmlContentSet);
+            string contentStrings;
+            contentStrings = CreateContentBlock(note.Attributes.GetNamedItem("key").Value, xmlContentSet);
             string page = 
             @"<ScrollViewer VerticalScrollBarVisibility='Auto'>
             <StackPanel>";
-           
-            for (int i = 0; i <= contentStrings.Count-1; i++)
-                page += contentStrings[i];            
-            page += "</StackPanel> </ScrollViewer>";      
+            page += contentStrings + "</StackPanel> </ScrollViewer>";      
             
             return page;
         }
@@ -158,19 +202,25 @@ namespace STE
                 {
                     case "question": 
                         page += CreateQuestionElement(child.Attributes.GetNamedItem("key").Value, xmlContentSet); 
-                        
                         break;
-
                     case "single-answer": 
                         page+=CreateSingleAnswerElement(child,xmlContentSet); 
-                        
                         break;
-
-                    case "multiple-answer": page+=CreateMultipleAnswerElement(child,xmlContentSet); break;
-                    case "open-answer": page+=CreateOpenAnswerElement(child,xmlContentSet); break;
-                    case "single-semiopen-answer": page+=CreateSingleSemiopenAnswerElement(child,xmlContentSet); break;
-                    case "multiple-semiopen-answer": page+=CreateMultipleSemiopenAnswerElement(child,xmlContentSet); break;
-                    case "matching-answer": page+=CreateMatchingAnswerElement(child,xmlContentSet); break;
+                    case "multiple-answer": 
+                        page+=CreateMultipleAnswerElement(child,xmlContentSet);
+                        break;
+                    case "open-answer": 
+                        page+=CreateOpenAnswerElement(child,xmlContentSet); 
+                        break;
+                    case "single-semiopen-answer": 
+                        page+=CreateSingleSemiopenAnswerElement(child,xmlContentSet); 
+                        break;
+                    case "multiple-semiopen-answer":
+                        page+=CreateMultipleSemiopenAnswerElement(child,xmlContentSet); 
+                        break;
+                    case "matching-answer": 
+                        page+=CreateMatchingAnswerElement(child,xmlContentSet); 
+                        break;
                 }
             }
             
@@ -184,30 +234,22 @@ namespace STE
         /// <returns></returns>
         public string CreateQuestionElement(string contentId,XmlDocument xmlContent)
         {
-            List<string> sElements = new List<string>();
-            sElements = FindContentById(contentId, xmlContent);
-            ///Костыль для демонстрации возможностей. Убери.
-            string mySuperString = "<WrapPanel Orientation='Vertical'>";
-            for (int i = 0; i < sElements.Count;i++ )
-            {
-                mySuperString += sElements[i];
-            }
-                return mySuperString+"</WrapPanel>";
+            return CreateContentBlock(contentId, xmlContent); ;
         }
        /// <summary>
-       /// Не дописан гибкий вариант компоновки
+       /// Минимум написан. Пока есть 1 вариант компоновки
        /// </summary>
        /// <param name="node"></param>
        /// <param name="xmlContent"></param>
        /// <returns></returns>
         public string CreateSingleAnswerElement(XmlNode node,XmlDocument xmlContent)
         {
-            List<List<string>> sOptionElements = new List<List<string>>();
+            List<string> sOptionElements = new List<string>();
             string sSingleAnswerElement = "";
             foreach(XmlNode option in node.ChildNodes)
             {
-                sOptionElements.Add(FindContentById(option.Attributes.GetNamedItem("key").Value, xmlContent));
-                sSingleAnswerElement += "<RadioButton> "+ sOptionElements.Last()[0]+ " </RadioButton>";
+                sOptionElements.Add(CreateContentBlock(option.Attributes.GetNamedItem("key").Value, xmlContent));
+                sSingleAnswerElement += "<RadioButton> "+ sOptionElements.Last()+ " </RadioButton>";
             }
 
             return @"<GroupBox>
@@ -216,7 +258,7 @@ namespace STE
                         " </WrapPanel> </GroupBox>";
         }
         /// <summary>
-        /// Не дописан гибкий вариант компоновки!!!!!!!
+        /// Минимум написан. Пока есть 1 вариант компоновки
         /// </summary>
         /// <param name="node"></param>
         /// <param name="xmlContent"></param>
@@ -224,12 +266,12 @@ namespace STE
         public string CreateMultipleAnswerElement(XmlNode node, XmlDocument xmlContent)
         {
 
-            List<List<string>> sOptionElements = new List<List<string>>();
+            List<string> sOptionElements = new List<string>();
             string sMultipleAnswerElement = "";
             foreach (XmlNode option in node.ChildNodes)
             {
-                sOptionElements.Add(FindContentById(option.Attributes.GetNamedItem("key").Value, xmlContent));
-                sMultipleAnswerElement += "<CheckBox> " + sOptionElements.Last()[0] + " </CheckBox>";
+                sOptionElements.Add(CreateContentBlock(option.Attributes.GetNamedItem("key").Value, xmlContent));
+                sMultipleAnswerElement += "<CheckBox> " + sOptionElements.Last() + " </CheckBox>";
             }
 
             return @"<GroupBox>
@@ -254,13 +296,13 @@ namespace STE
         public string CreateSingleSemiopenAnswerElement(XmlNode node, XmlDocument xmlContent)
         {
             string SingleSemiopenAnswerElement="";
-            List<List<string>> sOptionElements = new List<List<string>>();
+            List<string> sOptionElements = new List<string>();
             foreach (XmlNode option in node.ChildNodes)
             {
                 if (option.Name == "option")
                 {
-                    sOptionElements.Add(FindContentById(option.Attributes.GetNamedItem("key").Value, xmlContent));
-                    SingleSemiopenAnswerElement += "<RadioButton Margin='5'> " + sOptionElements.Last()[0] + " </RadioButton>";
+                    sOptionElements.Add(CreateContentBlock(option.Attributes.GetNamedItem("key").Value, xmlContent));
+                    SingleSemiopenAnswerElement += "<RadioButton Margin='5'> " + sOptionElements.Last() + " </RadioButton>";
                 } else
                 {
                     SingleSemiopenAnswerElement += "<TextBox Margin='5'>" + "Введите ответ" + " </TextBox>";
