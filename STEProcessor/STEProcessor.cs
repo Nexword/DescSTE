@@ -13,22 +13,36 @@ namespace STE
         List<string> CreatePages(XmlNode test, XmlDocument xmlTaskSet, XmlDocument xmlContentSet);
     }
 
-    public class Layouts
+
+    public  class STEProcessor:ISTEProcessor
     {
-        public delegate string TypeLayout(List<STEProcessor.PairURLType> pairs);
-        public Dictionary<string, TypeLayout> MakeLayout;
-
-        public Layouts()
+        static List<string> contentString = new List<string>();
+        
+        public struct URLTypePair
         {
-            MakeLayout=new Dictionary<string,TypeLayout>
-              {
-                {"typeA",new TypeLayout(CreateLayoutA) },
-                {"typeB",new TypeLayout(CreateLayoutB) },
-
-            };
+            public string url;
+            public string type;
         }
 
-        public string GetTextFromFile(string fileName)
+        private delegate string DrawContentBlockAction(List<URLTypePair> urlTypePairs);
+
+        /// <summary>
+        /// Считываем весь текст, относящийся к тесту
+        /// </summary>
+        /// <param name="fileName">Имя файла с текстом. По умолчанию text.txt</param>
+        public void GetTextFromFile(string fileName)
+        {
+            StreamReader sStream = new StreamReader(fileName);
+            while (!sStream.EndOfStream)
+            {
+                contentString.Add(sStream.ReadLine());
+            }
+            sStream.Close();
+        }
+
+#region Dictionary definition
+       
+        /*private static string GetTextFromFile(string fileName)
         {
             int k = fileName.IndexOf('#');
             string fName = fileName.Substring(0, k) + ".txt";
@@ -36,51 +50,45 @@ namespace STE
             string note = File.ReadLines(fName).Skip(strSkip - 1).First();
 
             return note;
-        }
-
-        public string CreateLayoutA(List<STEProcessor.PairURLType> pairs)
-        {
-            string result = " <WrapPanel Orientation='Vertical'> ";         
-            for (int i = 0; i < pairs.Count;i++ )
-            {
-                string sElement = "";
-                switch (pairs[i].type)
-                {
-                   
-                    case "text":
-                        sElement = GetTextFromFile(pairs[i].url);
-                        sElement = @"<TextBlock FontSize='25' Margin='5' TextWrapping='Wrap'>" + sElement + "</TextBlock>";
-                        break;
-                    case "image":
-                        sElement = @"<Image Height='400' Width='400' Source='pack://siteoforigin:,,,/" + pairs[i].url + "' />";
-                        break;
-                    case "video":
-                        sElement = @"<MediaElement Height='Auto' MaxWidth='800' MaxHeight='600'  Margin='5' Width='Auto' Source='pack://siteoforigin:,,,/" + pairs[i].url + "' />";
-                        break;
-                    case "audio":
-                        sElement = @"<MediaElement Height='Auto' Width='Auto' Source='pack://siteoforigin:,,,/" + pairs[i].url + "' />";
-                        break;
-                }
-                result += sElement+" ";
-            }
-            
-            return result + " </WrapPanel>"; 
-        }
-
-        public string CreateLayoutB(List<STEProcessor.PairURLType> pairs)
-        { return ""; }
-    
-    }
- 
-
-    public  class STEProcessor:ISTEProcessor
-    {
-        Layouts layout = new Layouts();
+        }*/
         
-        public struct PairURLType
-        {
-            public string url,type;
-        }
+
+        Dictionary<string, DrawContentBlockAction> Layouts = new Dictionary<string, DrawContentBlockAction>
+            {
+                { "typeA", 
+                    delegate(List<URLTypePair> pairs)
+                    { 
+                        string result = " <WrapPanel Orientation='Vertical'> ";         
+                        for (int i = 0; i < pairs.Count;i++ )
+                        {
+                            string sElement = "";
+                            switch (pairs[i].type)
+                            {
+                   
+                                case "text":
+                                    int k = pairs[i].url.IndexOf('_');
+                                    sElement = contentString[Convert.ToInt32(pairs[i].url.Substring(k + 1, pairs[i].url.Length - k - 1))-1];
+                                    sElement = @"<TextBlock FontSize='25' Margin='5' TextWrapping='Wrap'>" + sElement + "</TextBlock>";
+                                    break;
+                                case "image":
+                                    sElement = @"<Image Height='400' Width='400' Source='pack://siteoforigin:,,,/" + pairs[i].url + "' />";
+                                    break;
+                                case "video":
+                                    sElement = @"<MediaElement Height='Auto' MaxWidth='800' MaxHeight='600'  Margin='5' Width='Auto' Source='pack://siteoforigin:,,,/" + pairs[i].url + "' />";
+                                    break;
+                                case "audio":
+                                    sElement = @"<MediaElement Height='Auto' Width='Auto' Source='pack://siteoforigin:,,,/" + pairs[i].url + "' />";
+                                    break;
+                            }
+                            result += sElement+" ";
+                        }            
+                        return result + " </WrapPanel>"; 
+                    } 
+                },
+                  
+            };
+
+#endregion
         
         /// <summary>
         ///  Управляющий метод для создания блока контента. Содержит функцию формирования URL-ТИП,
@@ -93,12 +101,12 @@ namespace STE
             XmlNode contentBlock = xmlContent.SelectSingleNode(String.Format("//content-set//content-block[@id='{0}']", id));
             string typeLayout = "";
             string result="";
-            Layouts.TypeLayout DelegateMethod;
-            List<PairURLType> pairs;
+            List<URLTypePair> pairs;
+            DrawContentBlockAction drawer; 
             pairs=GetUrlTypePairs(contentBlock);
             typeLayout = contentBlock.Attributes.GetNamedItem("layout").Value;
-            layout.MakeLayout.TryGetValue(typeLayout, out DelegateMethod);
-            return result = DelegateMethod(pairs);
+            Layouts.TryGetValue(typeLayout, out drawer);
+            return result = drawer(pairs);
         }
 
         /// <summary>
@@ -107,18 +115,17 @@ namespace STE
         /// <param name="id">id content-block</param>
         /// <param name="xmlContent"> файл со всеми content-blocks</param>
         /// <returns>Функция возвращает список пар URL-ТИП</returns>
-        public List<PairURLType> GetUrlTypePairs(XmlNode contentBlock)
+        public List<URLTypePair> GetUrlTypePairs(XmlNode contentBlock)
         {
-            List<PairURLType> myPairsUrlType=new List<PairURLType>();
-            PairURLType pair;
+            List<URLTypePair> myUrlTypePairs = new List<URLTypePair>();
+            URLTypePair pair;
             foreach (XmlNode contentItem in contentBlock.ChildNodes)
             {
                 pair.type=contentItem.Name;
                 pair.url = contentItem.Attributes.GetNamedItem("url").Value;
-                myPairsUrlType.Add(pair);
+                myUrlTypePairs.Add(pair);
             }
-                
-            return myPairsUrlType;
+            return myUrlTypePairs;
         }
 
 
@@ -135,7 +142,7 @@ namespace STE
         {
             List<string> pages = new List<string>();
             XmlNodeList testNodes = test.ChildNodes;
-
+            GetTextFromFile("text.txt");
             foreach (XmlNode node in testNodes)
             {
                 if (node.Name == "note") pages.Add(CreateTestNotePage(node, xmlContentSet));
@@ -154,8 +161,7 @@ namespace STE
         /// <param name="xmlContentSet"> xml документ с описанием содержимого</param>
         /// <returns> Возвращает набор страниц с заданиями для теста</returns>
         public List<string> CreateTestPages(XmlNode node, XmlDocument xmlTaskSet, XmlDocument xmlContentSet)
-        {
-            
+        {   
             List<string> pages = new List<string>();
             foreach(XmlNode child in node.ChildNodes)
             {
@@ -225,6 +231,7 @@ namespace STE
             
             return page;
         }
+
         /// <summary>
         /// Формирование элемента вопрос. Не реализовано(!!!) формирование сложной структуры.
         /// </summary>
@@ -235,6 +242,7 @@ namespace STE
         {
             return CreateContentBlock(contentId, xmlContent); ;
         }
+
        /// <summary>
        /// Минимум написан. Пока есть 1 вариант компоновки
        /// </summary>
@@ -250,7 +258,7 @@ namespace STE
             {
                 keyOption = option.Attributes.GetNamedItem("key").Value;
                 sOptionElements.Add(CreateContentBlock(keyOption, xmlContent));
-                sSingleAnswerElement += "<RadioButton " + "Tag='"+ keyOption + "'> "+ sOptionElements.Last()+ " </RadioButton>";
+                sSingleAnswerElement += "<RadioButton Click ='Checked_Button' Unchecked='Unchecked_Button'  Name='" + keyOption + "'> " + sOptionElements.Last() + " </RadioButton>";
             }
 
             return @"<GroupBox>
@@ -258,6 +266,7 @@ namespace STE
                     sSingleAnswerElement+
                         " </WrapPanel> </GroupBox>";
         }
+
         /// <summary>
         /// Минимум написан. Пока есть 1 вариант компоновки
         /// </summary>
@@ -274,7 +283,7 @@ namespace STE
             {
                 keyOption = option.Attributes.GetNamedItem("key").Value;
                 sOptionElements.Add(CreateContentBlock(keyOption, xmlContent));
-                sMultipleAnswerElement += "<CheckBox "+"Tag='"+keyOption+"'>" + sOptionElements.Last() + " </CheckBox>";
+                sMultipleAnswerElement += "<CheckBox  Name='" + keyOption + "'>" + sOptionElements.Last() + " </CheckBox>";
             }
 
             return @"<GroupBox>
@@ -282,6 +291,7 @@ namespace STE
                     sMultipleAnswerElement +
                         " </WrapPanel> </GroupBox>";
         }
+
         /// <summary>
         /// Я тут схалтурил
         /// </summary>
@@ -291,7 +301,9 @@ namespace STE
         public string CreateOpenAnswerElement(XmlNode node, XmlDocument xmlContent)
         {
             string sOpenAnswerElement = "Напишите ответ"; //заглушка
-            return @" <TextBox>"+
+
+            string keyOption = node.ChildNodes[0].Attributes.GetNamedItem("key").Value;
+            return @" <TextBox "+"Name='"+keyOption+"'>"+
                     sOpenAnswerElement+
                         "</TextBox>";
         }
@@ -299,16 +311,18 @@ namespace STE
         public string CreateSingleSemiopenAnswerElement(XmlNode node, XmlDocument xmlContent)
         {
             string SingleSemiopenAnswerElement="";
-            List<string> sOptionElements = new List<string>();
+            string keyOption = "";
+            string sOptionElements = "";
             foreach (XmlNode option in node.ChildNodes)
             {
+                   keyOption = option.Attributes.GetNamedItem("key").Value;
                 if (option.Name == "option")
                 {
-                    sOptionElements.Add(CreateContentBlock(option.Attributes.GetNamedItem("key").Value, xmlContent));
-                    SingleSemiopenAnswerElement += "<RadioButton Margin='5'> " + sOptionElements.Last() + " </RadioButton>";
+                    sOptionElements=CreateContentBlock(option.Attributes.GetNamedItem("key").Value, xmlContent);
+                    SingleSemiopenAnswerElement += "<RadioButton  Margin='5' Name='" + keyOption + "'>" + sOptionElements + " </RadioButton>";
                 } else
                 {
-                    SingleSemiopenAnswerElement += "<TextBox Margin='5'>" + "Введите ответ" + " </TextBox>";
+                    SingleSemiopenAnswerElement += " <TextBox Name='" + keyOption + "'>" + sOptionElements + "</TextBox>";
                 }
             }
 

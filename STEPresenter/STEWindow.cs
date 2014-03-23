@@ -13,7 +13,7 @@ namespace STE
 {
     public class STEWindow : Window
     {
-        public List<StackPanel> testPages;
+        public List<STEStackPanel> testPages;
         public StackPanel mainStackPanel;
         public WrapPanel buttonWrapPanel;
         public Grid userControlGrid;
@@ -21,7 +21,7 @@ namespace STE
         public static STEWindow LoadWindowFromXaml()
         {
             string xaml =
-            @"<local:STEWindow xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'
+            @"<local:STEWindow xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' 
             xmlns:local='clr-namespace:STE;assembly=STEPresenter' 
             xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'
             xmlns:sys='clr-namespace:System;assembly=mscorlib' WindowState='Maximized'>
@@ -73,7 +73,7 @@ namespace STE
             {
                 Button myButton = new Button();
                 myButton.Content = i + 1;
-                myButton.MinWidth = 75;
+                myButton.MinWidth = 20;
                 int pageNumber = i;
                 myButton.Click +=  new RoutedEventHandler(
                     delegate(object sender, RoutedEventArgs e) 
@@ -101,9 +101,11 @@ namespace STE
         {
             mainStackPanel = (StackPanel)this.FindName("MainStackPanel");
             buttonWrapPanel = (WrapPanel)this.FindName("ButtonWrapPanel");
-            CreateWrapPanelButtons();
-            
+            CreateWrapPanelButtons();            
         }
+
+
+       
 
         private void PreviousButtonClick(object sender, RoutedEventArgs e)
         {
@@ -135,5 +137,31 @@ namespace STE
                 }
             }
         }
+
+
+
+
+
+
     }
+ 
+    
+    public class STEStackPanel : StackPanel
+    {
+        public static XmlDocument xmlTaskSet; 
+        private void Checked_Button(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Hello MessageBox");  
+        }
+
+        private void Unchecked_Button(object sender, RoutedEventArgs e)
+        {
+            
+            MessageBox.Show((sender as RadioButton).Name);
+        }
+    }
+
+
+
+
 }

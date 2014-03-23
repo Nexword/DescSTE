@@ -32,11 +32,12 @@ namespace STE
             xmlTaskSet = data.GetXMLTask();
             xmlContentSet = data.GetXMLContent();
             ISTEProcessor myWPFProcessor = new STEProcessor();
-            
+            STEStackPanel.xmlTaskSet = xmlTaskSet; 
             List<List<string>> xamlPages = new List<List<string>>();
             XmlNodeList tests = xmlTestSet.GetElementsByTagName("test");
             foreach (XmlNode test in tests)
                 xamlPages.Add(myWPFProcessor.CreatePages(test,xmlTaskSet,xmlContentSet));
+            MakeAnswerSet(xmlTaskSet);
 
 
 
@@ -46,8 +47,7 @@ namespace STE
 
 
 
-
-           List<StackPanel> wpfPages = new List<StackPanel>();
+           List<STEStackPanel> wpfPages = new List<STEStackPanel>();
            STEWindow window = STEWindow.LoadWindowFromXaml();
            window.Show();
            foreach(List<string> xmlPage in xamlPages)
@@ -58,28 +58,45 @@ namespace STE
           
            window.CreateMainElements();
            window.CurrentPage = 0;
+           
         }
 
-     
-
-
-        public List<StackPanel> CreateWPFPages(List<string> xamlPages)
+        public List<STEStackPanel> CreateWPFPages(List<string> xamlPages)
         {
-            List<StackPanel> wpfElements= new List<StackPanel>();
+            List<STEStackPanel> wpfElements = new List<STEStackPanel>();
             
             foreach (string xamlPage in xamlPages)
             {
-                string xamlTestPage = @"<StackPanel xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'
-                    xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'> " + xamlPage + " </StackPanel>";
+                string xamlTestPage =
+                     @"<local:STEStackPanel xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' 
+            xmlns:local='clr-namespace:STE;assembly=STEPresenter' 
+            xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'
+           >"
+
+                    + xamlPage + "</local:STEStackPanel>";
                 StringReader reader = new StringReader(xamlTestPage);
                 XmlReader xamlStream=XmlReader.Create(reader);
-                wpfElements.Add((StackPanel)XamlReader.Load(xamlStream));
+                wpfElements.Add((STEStackPanel)XamlReader.Load(xamlStream));
             }
 
             return wpfElements;
         }
-  
 
+        public void MakeAnswerSet(XmlDocument xmlTaskSet)
+        {
+            XmlNodeList xMap = xmlTaskSet.SelectNodes("//task-set//task");
+            foreach(XmlNode node in xMap)
+            {
+                XmlAttribute xKey = xmlTaskSet.CreateAttribute("id");
+                
+                node.Attributes.RemoveNamedItem("");
+                node.Attributes.Append(xKey);
+              
+            }
+
+        }
+
+       
 
 
 
