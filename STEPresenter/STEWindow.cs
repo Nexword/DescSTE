@@ -13,11 +13,12 @@ namespace STE
 {
     public class STEWindow : Window
     {
-        public List<STEStackPanel> testPages;
+        public STEController controller;
         public StackPanel mainStackPanel;
         public WrapPanel buttonWrapPanel;
         public Grid userControlGrid;
         private int currentPage;
+        
         public static STEWindow LoadWindowFromXaml()
         {
             string xaml =
@@ -69,7 +70,7 @@ namespace STE
 
         public void CreateWrapPanelButtons()
         {
-            for (int i = 0; i < testPages.Count; i++)
+            for (int i = 0; i < controller.storage.wpfPage.Count; i++)
             {
                 Button myButton = new Button();
                 myButton.Content = i + 1;
@@ -92,6 +93,7 @@ namespace STE
             Button myNextButton = new Button();
             Button myPreviousButton = new Button();
             myEndTestButton.Content = "Закночить тестирование";
+            myEndTestButton.Click += EndTestClick; 
             myEndTestButton.SetValue(Grid.ColumnProperty, 1);
             userControlGrid.Children.Add(myEndTestButton);
             
@@ -115,9 +117,24 @@ namespace STE
         {
             CurrentPage = CurrentPage + 1;
         }
+
         private void EndTestClick(object sender, RoutedEventArgs e)
         {
- 
+            //Пока здесь сохранение в текстовые файлы
+            var xdoc = new XmlDocument();
+            for (int i = 0; i < controller.storage.xmlTaskResults.Count; i++)
+            {
+                StreamWriter sw1 = new StreamWriter(Environment.CurrentDirectory + "\\Results\\" + i + ".txt");
+
+
+                XmlTextWriter writer = new XmlTextWriter(sw1);
+              
+                controller.storage.xmlTaskResults[i].WriteTo(writer);
+                writer.Close();
+            }
+            
+            
+           
         }
 
         public int CurrentPage
@@ -129,11 +146,12 @@ namespace STE
 
             set
             {
-                if (value >= 0 && value < testPages.Count)
+                if (value >= 0 && value < controller.storage.wpfPage.Count)
                 {
                     currentPage = value;
+                    controller.currentPage = value;
                     mainStackPanel.Children.Clear();
-                    mainStackPanel.Children.Add(testPages[value]);
+                    mainStackPanel.Children.Add(controller.storage.wpfPage[value]);
                 }
             }
         }
@@ -146,20 +164,8 @@ namespace STE
     }
  
     
-    public class STEStackPanel : StackPanel
-    {
-        public static XmlDocument xmlTaskSet; 
-        private void Checked_Button(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Hello MessageBox");  
-        }
+    
 
-        private void Unchecked_Button(object sender, RoutedEventArgs e)
-        {
-            
-            MessageBox.Show((sender as RadioButton).Name);
-        }
-    }
 
 
 

@@ -26,79 +26,29 @@ namespace STE
         {
             
             InitializeComponent();
-            GetData data = new GetData();
-            XmlDocument xmlTestSet, xmlTaskSet, xmlContentSet;
-            xmlTestSet = data.GetXMLTest();
-            xmlTaskSet = data.GetXMLTask();
-            xmlContentSet = data.GetXMLContent();
-            ISTEProcessor myWPFProcessor = new STEProcessor();
-            STEStackPanel.xmlTaskSet = xmlTaskSet; 
-            List<List<string>> xamlPages = new List<List<string>>();
-            XmlNodeList tests = xmlTestSet.GetElementsByTagName("test");
-            foreach (XmlNode test in tests)
-                xamlPages.Add(myWPFProcessor.CreatePages(test,xmlTaskSet,xmlContentSet));
-            MakeAnswerSet(xmlTaskSet);
+            DataLoader getData = new DataLoader();
+            STEController ste = new STEController();
+            List<string> xamlPages = new List<string>();
 
-
-
-
-
-
-
-
-
-           List<STEStackPanel> wpfPages = new List<STEStackPanel>();
-           STEWindow window = STEWindow.LoadWindowFromXaml();
-           window.Show();
-           foreach(List<string> xmlPage in xamlPages)
-           {
-               wpfPages = CreateWPFPages(xmlPage);
-           }
-           window.testPages = wpfPages;
-          
-           window.CreateMainElements();
-           window.CurrentPage = 0;
+            //Мы говорим, что давай загрузи нам линейный тест с id T_001_001 из файла TestSet.xml, который расположен по стандартному адресу
+            List<string> xmlPages = getData.GetTasks(Environment.CurrentDirectory + "\\Tests\\TestSet.xml", "T_001_001");
+            List<XmlNode> xmlResultPages = new  List<XmlNode>();      
+            
+            //В этот момент на клиент приходят наши xmlPages
+            STEProcessor myWpfProcessor = new STEProcessor(ste);
+           
+            myWpfProcessor.CreatePages(xmlPages);
+           
+            STEWindow window = STEWindow.LoadWindowFromXaml();
+           //ФИГНЯ: получается, что Window связано по полю с контроллером. Это не очень круто выглядит. Но просто window
+            //должен иметь доступ к контролееру. Без глобальных переменных иначе хз как это реализовать. Есть предложения?
+            window.controller = ste;
+            window.Show();
+            window.CreateMainElements();
+            window.CurrentPage = 0;
            
         }
 
-        public List<STEStackPanel> CreateWPFPages(List<string> xamlPages)
-        {
-            List<STEStackPanel> wpfElements = new List<STEStackPanel>();
-            
-            foreach (string xamlPage in xamlPages)
-            {
-                string xamlTestPage =
-                     @"<local:STEStackPanel xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' 
-            xmlns:local='clr-namespace:STE;assembly=STEPresenter' 
-            xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'
-           >"
-
-                    + xamlPage + "</local:STEStackPanel>";
-                StringReader reader = new StringReader(xamlTestPage);
-                XmlReader xamlStream=XmlReader.Create(reader);
-                wpfElements.Add((STEStackPanel)XamlReader.Load(xamlStream));
-            }
-
-            return wpfElements;
-        }
-
-        public void MakeAnswerSet(XmlDocument xmlTaskSet)
-        {
-            XmlNodeList xMap = xmlTaskSet.SelectNodes("//task-set//task");
-            foreach(XmlNode node in xMap)
-            {
-                XmlAttribute xKey = xmlTaskSet.CreateAttribute("id");
-                
-                node.Attributes.RemoveNamedItem("");
-                node.Attributes.Append(xKey);
-              
-            }
-
-        }
-
        
-
-
-
     }
 }
