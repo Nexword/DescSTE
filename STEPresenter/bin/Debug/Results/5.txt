@@ -1,0 +1,1 @@
+<task id="K_001_032"><open-answer><open-option id="A_032_001" selected="false" value="&lt;text&gt;&lt;text&gt;&lt;&lt;&lt;" /></open-answer></task>

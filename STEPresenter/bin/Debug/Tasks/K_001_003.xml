@@ -1,0 +1,29 @@
+<task id='K_001_003'>
+		<question id='Q_003'>
+			<content-block layout='typeA'>
+				<text id='T_011'>3 Какое имя не может являться именем переменной?</text>
+			</content-block>
+		</question>
+		<single-answer>
+			<option id='A_003_001'>
+				<content-block  layout='typeA'>
+					<text id='T_012'>1) string &gt;</text>
+				</content-block>
+			</option>
+			<option id='A_003_002'>
+				<content-block layout='typeA'>
+					<text id='T_013'>2) true1</text>
+				</content-block>
+			</option>
+			<option id='A_003_003'>
+				<content-block layout='typeA'>
+					<text id='T_014'>3) i</text>
+				</content-block>
+			</option>
+			<option id='A_003_004'>
+				<content-block layout='typeA'>
+					<text id='T_015'>4) text4</text>
+				</content-block>
+			</option>
+		</single-answer>
+	</task>

@@ -1,0 +1,73 @@
+<answer-set>
+	<task key='####'>
+		<single-answer-case cost='#'>
+			<option key='###' />
+		</single-answer-case>
+		<single-answer-case cost='#'>
+			<option key='###' />
+		</single-answer-case>		
+	</task>
+	<task key='####'>
+		<multiple-answer-case cost='#'>
+			<option key='###' status='required' />
+			<option key='###' status='possible' bonus-if-checked='#' />
+			<option key='###' status='possible' bonus-if-not-checked='#' />
+			<option key='###' status='unallowed' />
+		</multiple-answer-case>
+		<multiple-answer-case cost='#'>
+			<option key='###' status='required' />
+			<option key='###' status='possible' bonus-if-checked='#' bonus-if-not-checked='#' />
+			<option key='###' status='possible' bonus-if-checked='#' bonus-if-not-checked='#' />
+			<option key='###' status='unallowed' />
+		</multiple-answer-case>		
+	</task>
+	<task key='####'>
+		<matching-answer-case cost='#'>
+			<matching match-key='###' slot-key='###' status='required' />
+			<matching match-key='###' slot-key='###' status='possible' bonus-if-checked='#' bonus-if-not-checked='#' />
+			<matching match-key='###' slot-key='###' status='possible' bonus-if-checked='#' bonus-if-not-checked='#' />
+			<matching match-key='###' slot-key='###' status='unallowed' />
+		</matching-answer-case>
+		<matching-answer-case cost='#'>
+			<matching match-key='###' slot-key='###' status='required' />
+			<matching match-key='###' slot-key='###' status='possible' bonus-if-checked='#' bonus-if-not-checked='#' />
+			<matching match-key='###' slot-key='###' status='possible' bonus-if-checked='#' bonus-if-not-checked='#' />
+			<matching match-key='###' slot-key='###' status='unallowed' />
+		</matching-answer-case>	
+	</task>
+	<task key='####'>
+		<open-answer-case cost='#'>
+			<open-option key='###' value='some string' case-sensitive='false' trim-spaces='true' />
+		</open-answer-case>
+		<open-answer-case cost='#'>
+			<open-option key='###' pattern='^(some|any) str[io]ng(\?)?$' case-sensitive='false' trim-spaces='true' />
+		</open-answer-case>	
+	</task>
+	<task key='####'>
+		<single-semiopen-answer-case cost='#'>
+			<option key='###' />
+		</single-semiopen-answer-case>
+		<single-semiopen-answer-case cost='#'>
+			<open-option key='###' value='some string' case-sensitive='false' trim-spaces='true' />
+		</single-semiopen-answer-case>
+		<single-semiopen-answer-case cost='#'>
+			<open-option key='###' pattern='^(some|any) str[io]ng(\?)?$' case-sensitive='false' trim-spaces='true' />
+		</single-semiopen-answer-case>		
+	</task>	
+	<task key='####'>
+		<multiple-semiopen-answer cost='#'>
+			<option key='###' status='required' />
+			<option key='###' status='possible' bonus-if-checked='#' bonus-if-not-checked='#' />
+			<option key='###' status='possible' bonus-if-checked='#' bonus-if-not-checked='#' />
+			<option key='###' status='unallowed' />
+			<open-option key='###' status='required' value='some string' />
+		</multiple-semiopen-answer>
+		<multiple-semiopen-answer cost='#'>
+			<option key='###' status='required' />
+			<option key='###' status='possible' bonus-if-checked='#' bonus-if-not-checked='#' />
+			<option key='###' status='possible' bonus-if-checked='#' bonus-if-not-checked='#' />
+			<option key='###' status='unallowed' />
+			<open-option key='###' status='possible' bonus-if-checked='#' bonus-if-not-checked='#' pattern='^(some|any) str[io]ng(\?)?$' case-sensitive='true' trim-spaces='false' />
+		</multiple-semiopen-answer>
+	</task>
+</answer-set>

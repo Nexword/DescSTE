@@ -1,0 +1,12 @@
+<test-set id='TS_001'>
+	<test id='T_001_001'>
+		<block id='B_001_001_001'>
+			<task key='K_001_001' />	
+			<task key='K_001_002' />
+			<task key='K_001_003' />
+			<task key='K_001_004' />
+			<task key='K_001_010'/>
+			<task key='K_001_032'/>
+		</block>		
+	</test>
+</test-set>

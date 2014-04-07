@@ -1,0 +1,257 @@
+<task-set id='KS_001'>
+	<task id='K_001_001'>
+		<question key='Q_001' />
+		<single-answer>
+			<option key='A_001_001' />
+			<option key='A_001_002' />
+			<option key='A_001_003' />
+			<option key='A_001_004' />
+		</single-answer>
+	</task>
+	<task id='K_001_002'>
+		<question key='Q_002' />
+		<single-answer>
+			<option key='A_002_001' />
+			<option key='A_002_002' />
+			<option key='A_002_003' />
+			<option key='A_002_004' />
+		</single-answer>
+	</task>
+	<task id='K_001_003'>
+		<question key='Q_003' />
+		<single-answer>
+			<option key='A_003_001' />
+			<option key='A_003_002' />
+			<option key='A_003_003' />
+			<option key='A_003_004' />
+		</single-answer>
+	</task>
+	<task id='K_001_004'>
+		<question key='Q_004' />
+		<single-answer>
+			<option key='A_004_001' />
+			<option key='A_004_002' />
+			<option key='A_004_003' />
+			<option key='A_004_004' />
+			<option key='A_004_005' />
+		</single-answer>
+	</task>
+	<task id='K_001_005'>
+		<question key='Q_005' />
+		<single-answer>
+			<option key='A_005_001' />
+			<option key='A_005_002' />
+			<option key='A_005_003' />
+			<option key='A_005_004' />
+		</single-answer>
+	</task>
+	<task id='K_001_006'>
+		<question key='Q_006' />
+		<open-answer>
+			<open-option key='A_006_001' />
+		</open-answer>
+	</task>
+	<task id='K_001_007'>
+		<question key='Q_007' />
+		<single-answer>
+			<option key='A_007_001' />
+			<option key='A_007_002' />
+			<option key='A_007_003' />
+			<option key='A_007_004' />
+		</single-answer>
+	</task>
+	<task id='K_001_008'>
+		<question key='Q_008' />
+		<open-answer>
+			<open-option key='A_008_001' />
+		</open-answer>
+	</task>
+	<task id='K_001_009'>
+		<question key='Q_009' />
+		<open-answer>
+			<open-option key='A_009_001' />
+		</open-answer>
+	</task>
+	<task id='K_001_010'>
+		<question key='Q_010' />
+		<matching-answer>
+			<matches>
+			<option key='A_010_001' />
+			<option key='A_010_002' />
+			<option key='A_010_003' />
+			<option key='A_010_004' />
+			<option key='A_010_005' />
+			<option key='A_010_006' />		
+			</matches>
+			<slots>
+			<option key='A_010_007' />
+			<option key='A_010_008' />
+			</slots>
+		</matching-answer>
+	</task>
+	<task id='K_001_011'>
+		<question key='Q_011' />
+		<single-answer>
+			<option key='A_011_001' />
+			<option key='A_011_002' />
+			<option key='A_011_003' />
+			<option key='A_011_004' />
+		</single-answer>
+	</task>
+	<task id='K_001_012'>
+		<question key='Q_012' />
+		<multiple-answer>
+			<option key='A_012_001' />
+			<option key='A_012_002' />
+			<option key='A_012_003' />
+			<option key='A_012_004' />
+			<option key='A_012_005' />
+			<option key='A_012_006' />
+			<option key='A_012_007' />
+			<option key='A_012_008' />
+		</multiple-answer>
+	</task>
+	<task id='K_001_013'>
+		<question key='Q_013' />
+		<multiple-answer>
+			<option key='A_013_001' />
+			<option key='A_013_002' />
+			<option key='A_013_003' />
+			<option key='A_013_004' />
+			<option key='A_013_005' />
+			<option key='A_013_006' />
+			<option key='A_013_007' />
+			<option key='A_013_008' />
+		</multiple-answer>
+	</task>
+	<task id='K_001_014'>
+		<question key='Q_014' />
+		<open-answer>
+			<open-option key='A_014_001' />
+		</open-answer>
+	</task>
+	<task id='K_001_015'>
+		<question key='Q_015' />
+		<open-answer>
+			<open-option key='A_015_001' />
+		</open-answer>
+	</task>	
+	<task id='K_001_016'>
+		<question key='Q_016' />
+		<open-answer>
+			<open-option key='A_016_001' />
+		</open-answer>
+	</task>	
+	<task id='K_001_017'>
+		<question key='Q_017' />
+		<open-answer>
+			<open-option key='A_017_001' />
+		</open-answer>
+	</task>	
+	<task id='K_001_018'>
+		<question key='Q_018' />
+		<open-answer>
+			<open-option key='A_018_001' />
+		</open-answer>
+	</task>	
+	<task id='K_001_019'>
+		<question key='Q_019' />
+		<open-answer>
+			<open-option key='A_019_001' />
+		</open-answer>
+	</task>	
+	<task id='K_001_020'>
+		<question key='Q_020' />
+		<open-answer>
+			<open-option key='A_020_001' />
+		</open-answer>
+	</task>	
+	<task id='K_001_021'>
+		<question key='Q_021' />
+		<open-answer>
+			<open-option key='A_021_001' />
+		</open-answer>
+	</task>	
+	<task id='K_001_022'>
+		<question key='Q_022' />
+		<open-answer>
+			<open-option key='A_022_001' />
+		</open-answer>
+	</task>	
+	<task id='K_001_023'>
+		<question key='Q_023' />
+		<open-answer>
+			<open-option key='A_023_001' />
+		</open-answer>
+	</task>	
+	<task id='K_001_024'>
+		<question key='Q_024' />
+		<open-answer>
+			<open-option key='A_024_001' />
+		</open-answer>
+	</task>	
+	<task id='K_001_025'>
+		<question key='Q_025' />
+		<open-answer>
+			<open-option key='A_025_001' />
+		</open-answer>
+	</task>	
+	<task id='K_001_026'>
+		<question key='Q_026' />
+		<open-answer>
+			<open-option key='A_026_001' />
+		</open-answer>
+	</task>	
+	<task id='K_001_027'>
+		<question key='Q_027' />
+		<open-answer>
+			<open-option key='A_027_001' />
+		</open-answer>
+	</task>	
+	<task id='K_001_028'>
+		<question key='Q_028' />
+		<open-answer>
+			<open-option key='A_028_001' />
+		</open-answer>
+	</task>	
+	<task id='K_001_029'>
+		<question key='Q_029' />
+		<open-answer>
+			<open-option key='A_029_001' />
+		</open-answer>
+	</task>		
+	<task id='K_001_030'>
+		<question key='Q_030' />
+		<matching-answer>
+			<matches>
+			<option key='A_030_001' />
+			<option key='A_030_002' />
+			<option key='A_030_003' />
+			<option key='A_030_004' />
+			<option key='A_030_005' />
+			<option key='A_030_006' />
+			<option key='A_030_007' />
+			<option key='A_030_008' />	
+			<option key='A_030_009' />				
+			</matches>
+			<slots>
+			<option key='A_030_010' />
+			<option key='A_030_011' />
+			<option key='A_030_012' />
+			<option key='A_030_013' />
+			</slots>
+		</matching-answer>
+	</task>
+	<task id='K_001_031'>
+		<question key='Q_031' />
+		<open-answer>
+			<open-option key='A_031_001' />
+		</open-answer>
+	</task>	
+		<task id='K_001_032'>
+		<question key='Q_032' />
+		<open-answer>
+			<open-option key='A_032_001' />
+		</open-answer>
+	</task>	
+</task-set>

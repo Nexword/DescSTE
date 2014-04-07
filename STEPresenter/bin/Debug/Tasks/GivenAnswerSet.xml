@@ -1,0 +1,70 @@
+<!DOCTYPE answer-value-set PUBLIC "-//STE//Logical//1//AnswerValueSet" "http://www.ste.org/docs/0.1/xml/dtd/AnswerValueSet.dtd">
+
+<answer-set>
+	<task key='####' elapsed-time='0000'>
+		<single-answer>
+			<option id='###' selected='true' />
+			<option id='###' selected='false' />
+			<option id='###' selected='false' />
+		</single-answer>
+	</task>
+	<task key='####' elapsed-time='0000'>
+		<multiple-answer>
+			<option id='###' selected='true' />
+			<option id='###' selected='false' />
+			<option id='###' selected='true' />
+			<option id='###' selected='false' />
+		</multiple-answer>
+	</task>
+	<task key='####' elapsed-time='0000'>
+		<matching-answer>
+			<matching match-id='###' slot-id='###' />
+			<matching match-id='###' slot-id='###' />
+			<matching match-id='###' slot-id='###' />
+			<matching match-id='###' slot-id='###' />
+			<matching match-id='###' slot-id='###' />
+		</matching-answer>
+	</task>
+	<task key='####' elapsed-time='0000'>
+		<open-answer>
+			<open-option id='###' selected='true' value='Some string' />
+		</open-answer>
+	</task>
+	<task key='####' elapsed-time='0000'>
+		<single-semiopen-answer>
+			<option id='###' selected='false' />
+			<option id='###' selected='true' />
+			<option id='###' selected='false' />
+			<option id='###' selected='false' />
+			<open-option id='###' selected='false' />
+		</single-semiopen-answer>
+	</task>
+	<task key='####' elapsed-time='0000'>
+		<single-semiopen-answer>
+			<option id='###' selected='false' />
+			<option id='###' selected='false' />
+			<option id='###' selected='false' />
+			<option id='###' selected='false' />
+			<open-option id='###' selected='true' value='Some string' />
+		</single-semiopen-answer>
+	</task>	
+	<task key='####' elapsed-time='0000'>
+		<multiple-semiopen-answer>
+			<option id='###' selected='false' />
+			<option id='###' selected='true' />
+			<option id='###' selected='true' />
+			<option id='###' selected='false' />
+			<open-option id='###' selected='true' value='Some string' />
+		</multiple-semiopen-answer>
+	</task>
+	<task key='####' elapsed-time='0000'>
+		<multiple-semiopen-answer>
+			<option id='###' selected='true' />
+			<option id='###' selected='false' />
+			<option id='###' selected='false' />
+			<option id='###' selected='false' />
+			<open-option id='###' selected='true' value='Some string' />
+			<open-option id='###' selected='true' value='Some other string' />
+		</multiple-semiopen-answer>
+	</task>
+</answer-set>

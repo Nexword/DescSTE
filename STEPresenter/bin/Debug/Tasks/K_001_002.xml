@@ -1,0 +1,37 @@
+	<task id='K_001_002'>
+		<question id='Q_002'>
+			<content-block layout='typeA'>
+				<text id='T_006'>2 Какое имя не может являться \t \n \&gt; именем переменной?</text>
+			</content-block>
+		</question>
+		<single-answer>
+			<option id='A_002_001'>
+				<content-block layout='typeA'>
+					<text id='T_007' url='text_7'>
+						1) true
+					</text>
+				</content-block>
+			</option>
+			<option id='A_002_002'>
+				<content-block layout='typeA'>
+					<text id='T_008'>
+						2) true1
+					</text>					
+				</content-block>
+			</option>
+			<option id='A_002_003'>
+				<content-block layout='typeA'>
+					<text id='T_009'>
+						3) treu
+					</text>
+				</content-block>
+			</option>
+			<option id='A_002_004'>
+				<content-block layout='typeA'>
+					<text id='T_010'>
+						4) tr
+					</text>
+				</content-block>
+			</option>
+		</single-answer>
+	</task>

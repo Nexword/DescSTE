@@ -1,0 +1,71 @@
+<task id='K_001_010'>
+		<question id='Q_010'>
+		<content-block layout='typeA'>
+			<text id='T_038'>
+			10 Соотнесите переменные и типы (один тип соответствует нескольким переменным):
+			</text>
+	</content-block>
+	</question>
+		<matching-answer>
+			<matches>
+			<option id='A_010_001'>
+				<content-block  layout='typeA'>
+					<text id='T_039'>
+					а) x:=7*9 
+					</text>
+				</content-block>
+			</option>
+			<option id='A_010_002'>
+				<content-block layout='typeA'>
+					<text id='T_040'>
+					б) p:=8/9 
+					</text>
+				</content-block>
+			</option>
+			<option id='A_010_003'>
+			<content-block layout='typeA'>
+				<text id='T_041'>
+					в) z:=9 mod 2
+				</text>
+			</content-block>
+			</option>
+			<option id='A_010_004'>
+				<content-block layout='typeA'>
+					<text id='T_042'>	
+						г) t:=8 div 9
+					</text>
+				</content-block>
+			</option>
+			<option id='A_010_005'>
+				<content-block layout='typeA'>
+					<text id='T_043'>
+						д) y:=sin (x)
+					</text>
+				</content-block>
+			</option>
+			<option id='A_010_006'>
+				<content-block  layout='typeA'>
+					<text id='T_044'>	
+						е) w:=frac (x)
+					</text>
+			</content-block>
+			</option>			
+			</matches>
+			<slots>
+			<option id='A_010_007'>
+				<content-block layout='typeA'>
+					<text id='T_045'>	
+					1) integer
+					</text>
+			</content-block>
+			</option>
+			<option id='A_010_008'>
+				<content-block layout='typeA'>
+					<text id='T_046'>	
+						2) real
+					</text>
+				</content-block>
+			</option>
+			</slots>
+		</matching-answer>
+	</task>

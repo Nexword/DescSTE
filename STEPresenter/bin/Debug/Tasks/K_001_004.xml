@@ -1,0 +1,46 @@
+<task id='K_001_004'>
+		<question id='Q_004'>
+			<content-block layout='typeA'>
+				<text id='T_016'>
+					4 Как обозначается команда присваивания в PascalABC?
+				</text>
+			</content-block>
+		</question>
+		<single-answer>
+			<option id='A_004_001'>
+				<content-block layout='typeA'>
+					<text id='T_017'>
+						1) *
+					</text>
+				</content-block>
+			</option>
+			<option id='A_004_002' >
+				<content-block layout='typeA'>
+					<text id='T_018'>
+						2) =
+					</text>
+				</content-block>
+			</option>
+			<option id='A_004_003' >
+				<content-block layout='typeA'>
+					<text id='T_019'>
+						3) :=
+					</text>
+				</content-block>
+			</option>
+			<option id='A_004_004'>
+				<content-block  layout='typeA'>
+					<text id='T_020'>
+						4) ==
+					</text>
+				</content-block>	
+			</option>
+			<option id='A_004_005' >
+				<content-block id='A_004_005' layout='typeA'>
+					<text id='T_021'>	
+						5) =:
+					</text>
+				</content-block>
+			</option>
+		</single-answer>
+	</task>

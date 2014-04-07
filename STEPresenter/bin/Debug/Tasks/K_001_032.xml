@@ -1,0 +1,22 @@
+<task id='K_001_032'>
+		<question id='Q_032'>
+			<content-block layout='typeA'>
+				<text id='T_118'>32 Какой тип соответствует переменной s? </text>	
+				<image id='I_002' url='32.bmp' />
+				<video id='V_001' url='demo.wmv' />	
+				<image id='I_002' url='32.bmp' />
+				<image id='I_002' url='32.bmp' />
+				<image id='I_002' url='32.bmp' />
+				<image id='I_002' url='32.bmp' />
+			</content-block>
+		</question>
+		<open-answer>
+			<open-option id='A_032_001'>
+				<content-block  layout='typeA'>
+					<text id='T_119'>		
+					(пояснение)
+					</text>	
+				</content-block>	
+			</open-option>
+		</open-answer>
+</task>

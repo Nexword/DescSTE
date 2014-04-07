@@ -1,0 +1,37 @@
+<task id='K_001_001'>
+		<question id='Q_001'>
+			<content-block layout='typeA'>
+				<text id='T_001'>1 <Bold>Какое имя может</Bold> <LineBreak/>  являться именем переменной? </text>
+			</content-block>
+		</question>
+		<single-answer>
+			<option id='A_001_001'>
+				<content-block layout='typeA'>
+					<text id='T_002'>
+						1) 344
+					</text>					
+				</content-block>
+			</option>
+			<option id='A_001_002'>
+				<content-block layout='typeA'>
+					<text id='T_003'>
+						2) д
+					</text>
+				</content-block>
+			</option>
+			<option id='A_001_003'>
+				<content-block layout='typeA'>
+					<text id='T_004'>
+						3) 1w
+					</text>
+				</content-block>
+			</option>
+			<option id='A_001_004'>
+				<content-block layout='typeA'>
+					<text id='T_005'>
+						4) t4
+					</text>
+				</content-block>
+			</option>
+		</single-answer>
+	</task>
