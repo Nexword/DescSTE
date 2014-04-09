@@ -70,7 +70,7 @@ namespace STE
 
         public void CreateWrapPanelButtons()
         {
-            for (int i = 0; i < controller.storage.wpfPage.Count; i++)
+            for (int i = 0; i < controller.PageCount(); i++)
             {
                 Button myButton = new Button();
                 myButton.Content = i + 1;
@@ -107,7 +107,6 @@ namespace STE
         }
 
 
-       
 
         private void PreviousButtonClick(object sender, RoutedEventArgs e)
         {
@@ -122,14 +121,11 @@ namespace STE
         {
             //Пока здесь сохранение в текстовые файлы
             var xdoc = new XmlDocument();
-            for (int i = 0; i < controller.storage.xmlTaskResults.Count; i++)
+            for (int i = 0; i < controller.PageCount(); i++)
             {
                 StreamWriter sw1 = new StreamWriter(Environment.CurrentDirectory + "\\Results\\" + i + ".txt");
-
-
                 XmlTextWriter writer = new XmlTextWriter(sw1);
-              
-                controller.storage.xmlTaskResults[i].WriteTo(writer);
+                controller.GetTaskResult(i).WriteTo(writer);
                 writer.Close();
             }
             
@@ -146,12 +142,11 @@ namespace STE
 
             set
             {
-                if (value >= 0 && value < controller.storage.wpfPage.Count)
+                if (value >= 0 && value < controller.PageCount())
                 {
                     currentPage = value;
-                    controller.currentPage = value;
                     mainStackPanel.Children.Clear();
-                    mainStackPanel.Children.Add(controller.storage.wpfPage[value]);
+                    mainStackPanel.Children.Add(controller.GetWpf(value));
                 }
             }
         }

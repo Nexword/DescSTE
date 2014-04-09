@@ -19,7 +19,7 @@ namespace STE
     }
 
 
-    public  class STEProcessor
+    public  class STEWpfProcessor
     {
         static List<string> contentString = new List<string>();
         
@@ -107,32 +107,28 @@ namespace STE
 #region STEPWpfProcessor Part 
 
 
-        private STEController steController;
+        public  STEController steController;
 
-        public STEProcessor(STEController ste)
-        {
-            steController = ste;
-        }
+       
         /// <summary>
         /// Создание страниц с разметкой XAML
         /// </summary>
         /// <param name="xmlPages">Таски приходят в формате XML</param>
         /// <returns>Возвращает набор страниц с разметкой XAML</returns>
-        public void CreatePages(List<string> xmlPages)
+        public StackPanel CreatePages(string xmlPage)
         {
-            List<StackPanel> xamlPages = new List<StackPanel>();
-            List<XmlNode> xmlTaskResult=new List<XmlNode>();
+            //List<StackPanel> xamlPages = new List<StackPanel>();
+            //List<XmlNode> xmlTaskResult=new List<XmlNode>();
             XmlDocument doc = new XmlDocument();
-            foreach(string xmlPage in xmlPages)
-            {
-                
+               
                 doc.LoadXml(xmlPage);
-                xmlTaskResult.Add(CreateTestResult(xmlPage));
+                //xmlTaskResult.Add(CreateTestResult(xmlPage));
                 XmlNode currentPage = doc.DocumentElement;
-                if (currentPage.Name == "task") xamlPages.Add(CreateTask(currentPage));
-            }
-            steController.storage.xmlTaskResults = xmlTaskResult;
-            steController.storage.wpfPage = xamlPages;
+                //if (currentPage.Name == "task") 
+            return (CreateTask(currentPage));
+            
+            //steController.storage.xmlTaskResults = xmlTaskResult;
+            //steController.storage.wpfPage = xamlPages;
         }
         /// <summary>
         /// Создает одно задание
@@ -376,7 +372,7 @@ namespace STE
         private void Checked_Button(object sender, RoutedEventArgs e)
         {
             int k = steController.currentPage;
-            XmlNode currentTaskResult = steController.storage.xmlTaskResults[k];
+            XmlNode currentTaskResult = steController.GetTaskResult(k);
             XmlNode one = currentTaskResult.SelectSingleNode(String.Format("//*//*[@id='{0}']|//*//*[@match-id='{0}']", (sender as ToggleButton).Name));
             one.Attributes["selected"].Value = "true";
         }
@@ -388,7 +384,7 @@ namespace STE
         private void Unchecked_Button(object sender, RoutedEventArgs e)
         {
             int k = steController.currentPage;
-            XmlNode currentTaskResult = steController.storage.xmlTaskResults[k];
+            XmlNode currentTaskResult = steController.GetTaskResult(k);
             XmlNode one = currentTaskResult.SelectSingleNode(String.Format("//*//*[@id='{0}']|//*//*[@match-id='{0}']", (sender as ToggleButton).Name));
             one.Attributes["selected"].Value = "false";
 
@@ -401,7 +397,7 @@ namespace STE
         private void Text_Changed(object sender, RoutedEventArgs e)
         {
             int k = steController.currentPage;
-            XmlNode currentTaskResult = steController.storage.xmlTaskResults[k];
+            XmlNode currentTaskResult = steController.GetTaskResult(k);
             XmlNode one = currentTaskResult.SelectSingleNode(String.Format("//*//*[@id='{0}']|//*//*[@match-id='{0}']", (sender as TextBox).Name));
             one.Attributes["value"].Value = (sender as TextBox).Text;
             //MessageBox.Show((sender as TextBox).Name);
@@ -409,69 +405,7 @@ namespace STE
         
 #endregion
 #region Create Task Results
-        public XmlNode CreateTestResult(string xmlPage)
-        {
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(xmlPage);
-            XmlNode task = doc.CreateElement("task");
-            XmlNode root = doc.DocumentElement;
-            XmlAttribute typeAttr = doc.CreateAttribute("id");
-            typeAttr.Value = doc.DocumentElement.Attributes.GetNamedItem("id").Value;
-            task.Attributes.Append(typeAttr);
-            task.AppendChild(CreateResultNode(root, doc));
-
-            return task;
-        }
-
-        public XmlNode CreateResultNode(XmlNode root, XmlDocument doc)
-        {
-            XmlNode answerNode = doc.CreateElement(root.LastChild.Name);
-            if (root.LastChild.Name == "matching-answer") CreateMatchingAnswerNode(root, answerNode, doc);
-            else
-                CreateButtonAnswerNode(root, answerNode, doc);
-
-            return answerNode;
-        }
-
-        public XmlNode CreateButtonAnswerNode(XmlNode root, XmlNode answerNode, XmlDocument doc)
-        {
-            foreach (XmlNode option in root.LastChild.ChildNodes)
-            {
-                XmlAttribute selected = doc.CreateAttribute("selected");
-                selected.Value = "false";
-                XmlAttribute id = doc.CreateAttribute("id");
-                id.Value = option.Attributes.GetNamedItem("id").Value;
-                XmlElement optionNode = doc.CreateElement(option.Name);
-                optionNode.Attributes.Append(id);
-                optionNode.Attributes.Append(selected);
-
-                if (option.Name == "open-option")
-                {
-                    XmlAttribute textValue = doc.CreateAttribute("value");
-                    textValue.Value = "some text";
-                    optionNode.Attributes.Append(textValue);
-                }
-                answerNode.AppendChild(optionNode);
-            }
-            return answerNode;
-        }
-
-        public XmlNode CreateMatchingAnswerNode(XmlNode root, XmlNode answerNode, XmlDocument doc)
-        {
-            root = root.LastChild;
-            foreach (XmlNode match in root.FirstChild.ChildNodes)
-            {
-                XmlAttribute matchId = doc.CreateAttribute("match-id");
-                XmlAttribute slotId = doc.CreateAttribute("slot-id");
-                matchId.Value = match.Attributes.GetNamedItem("id").Value;
-                slotId.Value = "false";
-                XmlElement matchNode = doc.CreateElement("matching");
-                matchNode.Attributes.Append(matchId);
-                matchNode.Attributes.Append(slotId);
-                answerNode.AppendChild(matchNode);
-            }
-            return answerNode;
-        }
+        
 #endregion
 
     }

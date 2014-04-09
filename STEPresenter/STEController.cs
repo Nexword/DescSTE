@@ -4,22 +4,45 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Windows;
 using System.Windows.Controls;
 namespace STE
 {
     public class STEController
     {
+        STEStorage storage;
         public int currentPage = 0;
-        public STEStorage storage;   
-        public STEController()
+       
+        public STEController(STEWindow myWindow, STEStorage myStorage, STEWpfProcessor myWpfProcessor)
         {
-            storage = new STEStorage();
-        }      
+            myWindow.controller = this;
+            myWpfProcessor.steController = this;
+            storage = myStorage;
+        }
+
+        public int PageCount()
+        {
+            return storage.GetPageCount();
+        }
+
+        public StackPanel GetWpf(int index)
+        {
+            currentPage = index;
+            return storage.GetWpf(index);
+        }
+
+        public XmlNode GetTaskResult(int index)
+        {
+            return storage.GetTaskResult(index);
+        }
+
+
+      /*  StackPanel AddTask(XmlNode xml)
+        { }
+
+        StackPanel GetWpf(int index)
+        { }*/
     }
 
-    public class STEStorage
-    {
-        public List<StackPanel> wpfPage;
-        public List<XmlNode> xmlTaskResults;
-    }
+
 }
