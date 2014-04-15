@@ -27,29 +27,30 @@ namespace STE
             
             InitializeComponent();
             DataLoader getData = new DataLoader();
-            STEWindow window = STEWindow.LoadWindowFromXaml();
+
+            STEWindow window = WindowFabric.CreateWindow();
             STEXmlProcessor myXmlProcessor = new STEXmlProcessor();
             STEWpfProcessor myWpfProcessor = new STEWpfProcessor();
             STEStorage storage = new STEStorage(myWpfProcessor, myXmlProcessor);
-            STEController ste = new STEController(window,storage,myWpfProcessor);
+            STEController controller = new STEController(window,storage);
+            controller.StartLinearTestLoading();
+            myWpfProcessor.steController = controller;
+            
           
             List<string> xamlPages = new List<string>();
 
             //Мы говорим, что давай загрузи нам линейный тест с id T_001_001 из файла TestSet.xml, который расположен по стандартному адресу
             List<string> xmlPages = getData.GetTasks(Environment.CurrentDirectory + "\\Tests\\TestSet.xml", "T_001_001");
-            List<XmlNode> xmlResultPages = new  List<XmlNode>();      
-            foreach (string xmlPage in xmlPages)
+            foreach(string xmlPage in xmlPages)
             {
-                storage.AddTask(xmlPage);
-                storage.AddTaskResult(xmlPage);
+                controller.UploadTask(xmlPage);
             }
-       
-            window.Show();
-            window.CreateMainElements();
-            window.CurrentPage = 0;
+            controller.EndLinearTestLoading();
+            controller.StartLinearTestExecuting();
+            List<XmlNode> xmlResultPages = new  List<XmlNode>();      
            
-        }
-
-       
+            window.Show();
+            //window.CreateMainElements();  
+        }       
     }
 }

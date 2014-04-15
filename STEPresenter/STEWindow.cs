@@ -13,13 +13,95 @@ namespace STE
 {
     public class STEWindow : Window
     {
-        public STEController controller;
+        private STEController controller;
         public StackPanel mainStackPanel;
         public WrapPanel buttonWrapPanel;
-        public Grid userControlGrid;
-        private int currentPage;
+        private Grid userControlGrid;
+        private int buttonsCount = 0;
+        public int ButtonsCount 
+        { 
+            get 
+            {
+                return buttonsCount;
+            } 
+
+            set
+            {
+                buttonsCount=value;
+                CreateWrapPanelButtons(buttonsCount);
+            } 
+        }
         
-        public static STEWindow LoadWindowFromXaml()
+        
+        public void CreateWrapPanelButtons(int buttonCount)
+        {
+            for (int i = 0; i < buttonCount; i++)
+            {
+                Button myButton = new Button();
+                myButton.Content = i + 1;
+                myButton.MinWidth = 20;
+                int pageNumber = i;
+                myButton.Click +=  new RoutedEventHandler(
+                    delegate(object sender, RoutedEventArgs e) 
+                    {
+                        controller.SwitchPage(pageNumber);
+                    }
+                );
+                myButton.Margin = new Thickness(3);
+                buttonWrapPanel.Children.Add(myButton);
+            }
+        }
+
+        internal void UploadPage(StackPanel wpf)
+        {
+            mainStackPanel.Children.Clear();
+            mainStackPanel.Children.Add(wpf);
+        }
+
+        public void CreateUserControlElements()
+        {
+            Button myEndTestButton = new Button();
+            Button myNextButton = new Button();
+            Button myPreviousButton = new Button();
+            myEndTestButton.Content = "Закночить тестирование";
+            myEndTestButton.Click += EndTestClick; 
+            myEndTestButton.SetValue(Grid.ColumnProperty, 1);
+            userControlGrid.Children.Add(myEndTestButton);
+            
+        }
+
+      
+
+
+
+        private void PreviousButtonClick(object sender, RoutedEventArgs e)
+        {
+            controller.SwitchToPreviousPage();
+        }
+        private void NextButtonClick(object sender, RoutedEventArgs e)
+        {
+            controller.SwitchToNextPage();
+        }
+
+        private void EndTestClick(object sender, RoutedEventArgs e)
+        {
+            //Пока здесь сохранение в текстовые файлы
+            controller.SaveToFile(); 
+        }
+
+        public STEController Controller
+        {
+            set
+            {
+                controller = value;
+            }
+        }
+    }
+
+    class WindowFabric
+    {
+
+        public static STEWindow CreateWindow()
         {
             string xaml =
             @"<local:STEWindow xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' 
@@ -65,104 +147,12 @@ namespace STE
             StringReader reader = new StringReader(xaml);
             XmlReader xamlStream = XmlReader.Create(reader);
             STEWindow window = (STEWindow)XamlReader.Load(xamlStream);
+            window.mainStackPanel = (StackPanel)window.FindName("MainStackPanel");
+    
+            window.buttonWrapPanel = (WrapPanel)window.FindName("ButtonWrapPanel");
             return window;
         }
 
-        public void CreateWrapPanelButtons()
-        {
-            for (int i = 0; i < controller.PageCount(); i++)
-            {
-                Button myButton = new Button();
-                myButton.Content = i + 1;
-                myButton.MinWidth = 20;
-                int pageNumber = i;
-                myButton.Click +=  new RoutedEventHandler(
-                    delegate(object sender, RoutedEventArgs e) 
-                    { 
-                        this.CurrentPage = pageNumber; 
-                    }
-                );
-                myButton.Margin = new Thickness(3);
-                buttonWrapPanel.Children.Add(myButton);
-            }
-        }
-
-        public void CreateUserControlElements()
-        {
-            Button myEndTestButton = new Button();
-            Button myNextButton = new Button();
-            Button myPreviousButton = new Button();
-            myEndTestButton.Content = "Закночить тестирование";
-            myEndTestButton.Click += EndTestClick; 
-            myEndTestButton.SetValue(Grid.ColumnProperty, 1);
-            userControlGrid.Children.Add(myEndTestButton);
-            
-        }
-
-        public void CreateMainElements()
-        {
-            mainStackPanel = (StackPanel)this.FindName("MainStackPanel");
-            buttonWrapPanel = (WrapPanel)this.FindName("ButtonWrapPanel");
-            CreateWrapPanelButtons();            
-        }
-
-
-
-        private void PreviousButtonClick(object sender, RoutedEventArgs e)
-        {
-            CurrentPage = CurrentPage - 1;
-        }
-        private void NextButtonClick(object sender, RoutedEventArgs e)
-        {
-            CurrentPage = CurrentPage + 1;
-        }
-
-        private void EndTestClick(object sender, RoutedEventArgs e)
-        {
-            //Пока здесь сохранение в текстовые файлы
-            var xdoc = new XmlDocument();
-            for (int i = 0; i < controller.PageCount(); i++)
-            {
-                StreamWriter sw1 = new StreamWriter(Environment.CurrentDirectory + "\\Results\\" + i + ".txt");
-                XmlTextWriter writer = new XmlTextWriter(sw1);
-                controller.GetTaskResult(i).WriteTo(writer);
-                writer.Close();
-            }
-            
-            
-           
-        }
-
-        public int CurrentPage
-        {
-            get
-            {
-                return currentPage;
-            }
-
-            set
-            {
-                if (value >= 0 && value < controller.PageCount())
-                {
-                    currentPage = value;
-                    mainStackPanel.Children.Clear();
-                    mainStackPanel.Children.Add(controller.GetWpf(value));
-                }
-            }
-        }
-
-
-
-
-
-
+       
     }
- 
-    
-    
-
-
-
-
-
 }

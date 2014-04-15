@@ -1,1 +1,1 @@
-<task id="K_001_032"><open-answer><open-option id="A_032_001" selected="false" value="some text" /></open-answer></task>
+<task id="K_001_032"><open-answer><open-option id="A_032_001" selected="false" value="Карамба" /></open-answer></task>

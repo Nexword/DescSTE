@@ -1,1 +1,1 @@
-<task id="K_001_003"><single-answer><option id="A_003_001" selected="false" /><option id="A_003_002" selected="false" /><option id="A_003_003" selected="true" /><option id="A_003_004" selected="false" /></single-answer></task>
+<task id="K_001_003"><single-answer><option id="A_003_001" selected="false" /><option id="A_003_002" selected="false" /><option id="A_003_003" selected="false" /><option id="A_003_004" selected="false" /></single-answer></task>

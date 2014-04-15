@@ -38,12 +38,16 @@ namespace STE
         public void AddTask(string task)
         {
             wpfPages.Add(wpfProcessor.CreatePages(task));
-        }
-
-        public void AddTaskResult(string task)
-        {
             taskResultsPages.Add(xmlProcessor.CreateTestResult(task));
         }
+
+        internal void Clear()
+        {
+            wpfPages.Clear();
+            taskResultsPages.Clear();
+        }
+            
+        
 
         public int GetPageCount()
         {
