@@ -53,12 +53,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="STEController.cs" />
-    <Compile Include="STEDragDrop.cs" />
-    <Compile Include="STEStorage.cs" />
-    <Compile Include="STEWpfProcessor.cs" />
-    <Compile Include="STEWindow.cs" />
-    <Compile Include="STEXmlProcessor.cs" />
+    <Compile Include="SteController.cs" />
+    <Compile Include="SteStorage.cs" />
+    <Compile Include="SteWpfProcessor.cs" />
+    <Compile Include="SteWindow.cs" />
+    <Compile Include="SteXmlProcessor.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

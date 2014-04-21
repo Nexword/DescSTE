@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 namespace STE
 {
     public interface ISTEProcessor
@@ -276,7 +277,7 @@ namespace STE
             StackPanel myPanel = new StackPanel();
             foreach (XmlNode optionNode in node.ChildNodes)
             {
-                optionId = optionNode.Attributes.GetNamedItem("key").Value;
+                optionId = optionNode.Attributes.GetNamedItem("id").Value;
                 if (optionNode.Name == "option")
                 {
                     WrapPanel buttonContent = CreateContentBlock(optionNode);
@@ -321,15 +322,19 @@ namespace STE
             StackPanel MatchingAnswerElement=new StackPanel();
             Grid gridPanel = new Grid();
             Panel currentPanel;
-            STEDragDrop dragDrop=new STEDragDrop();
+            SteDragDrop dragDrop=new SteDragDrop();
+            dragDrop.steController = steController;
             double d = 0;
             double w = SystemParameters.PrimaryScreenWidth;
-
-
+            Viewbox box = new Viewbox();
+            box.Child = gridPanel;
+            string slotName="";
+            string matchName = "";
             foreach (XmlNode slot in node.LastChild.ChildNodes)
             {
-              
+                slotName = slot.Attributes.GetNamedItem("id").Value;
                 currentPanel=CreateSlotElement(slot);
+                currentPanel.Name = slotName;
                 double top = currentPanel.Margin.Top;
                 currentPanel.Margin = new Thickness(w-400, top + d, 0, 0);
                 dragDrop.slots.Add(currentPanel);
@@ -340,7 +345,9 @@ namespace STE
             d = 0;
             foreach (XmlNode match in node.FirstChild.ChildNodes)
             {
+                matchName = match.Attributes.GetNamedItem("id").Value;
                 currentPanel = CreateMatchElement(match, dragDrop);
+                currentPanel.Name = matchName;
                 double top = currentPanel.Margin.Top;
                 currentPanel.Margin = new Thickness(0, top + d, 0, 0);
                 gridPanel.Children.Add(currentPanel);
@@ -348,12 +355,13 @@ namespace STE
                
             }
             gridPanel.MouseMove += dragDrop.MatchElementdMouseMove;
-            MatchingAnswerElement.Children.Add(gridPanel);
+           
+            MatchingAnswerElement.Children.Add(box);
             
             return MatchingAnswerElement;
         }
 
-        private Panel CreateMatchElement(XmlNode match,STEDragDrop dragDrop)
+        private Panel CreateMatchElement(XmlNode match,SteDragDrop dragDrop)
         {
             Grid matchGrid = new Grid();
             matchGrid.Height = 100;
@@ -362,6 +370,7 @@ namespace STE
             matchGrid.PreviewMouseDown += dragDrop.MatchElementMouseDown;
             matchGrid.MouseUp += dragDrop.MatchElementMouseUp;
             matchGrid.MouseMove += dragDrop.MatchElementdMouseMove;
+            
             ScrollViewer scroll=new ScrollViewer();
             matchGrid.Children.Add(scroll);
             
@@ -486,8 +495,83 @@ namespace STE
             one.Attributes["value"].Value = (sender as TextBox).Text;
             //MessageBox.Show((sender as TextBox).Name);
         }
-       
-        public void Match_Drop(string match_id,string slot_id)
+
+     
+        
+#endregion
+#region Create Task Results
+        
+#endregion
+
+}
+    #region SteDragDrop
+
+    class SteDragDrop
+    {
+        bool moving = false;
+        Panel currentPanel;
+        public List<Panel> slots = new List<Panel>();
+        Point startPosition;
+        public STEController steController;
+
+        /// <summary>
+        ///  Отслеживание нажатий на внутрений элемент
+        /// </summary>
+        /// <param name="sender">Наш матч, который мы двигаем</param>
+        /// <param name="e"></param>
+        public void MatchElementMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            moving = true;
+            currentPanel = (Panel)sender;
+            Match_Up(currentPanel.Name);
+            startPosition = e.GetPosition(currentPanel);
+            currentPanel.CaptureMouse();
+        }
+
+        /// <summary>
+        /// Отслеживание движения мыши из внешнего контейнера
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void MatchElementdMouseMove(object sender, MouseEventArgs e)
+        {
+            if (moving == true)
+            {
+                Point currentPoint = e.GetPosition((Panel)sender);
+                double x = currentPoint.X - startPosition.X;
+                double y = currentPoint.Y - startPosition.Y;
+                currentPanel.Margin = new Thickness(x, y, 0, 0);
+            }
+        }
+
+        /// <summary>
+        /// Отпускаем кнопку мыши. Нужно проверить принадлежность текущего объекта к набору слотов, хранящихся в Map
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void MatchElementMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            moving = false;
+            if (currentPanel != null)
+            {
+                currentPanel.ReleaseMouseCapture();
+                foreach (Panel slot in slots)
+                {
+                    if (IsSlotMatched(slot))
+                    {
+                        Match_Drop(currentPanel.Name, slot.Name);
+                        currentPanel.Margin = new Thickness(slot.Margin.Left, slot.Margin.Top, 0, 0);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// При отпускании мыши помещаем матч в определенный слот 
+        /// </summary>
+        /// <param name="match_id"></param>
+        /// <param name="slot_id"></param>
+        public void Match_Drop(string match_id, string slot_id)
         {
             int k = steController.currentPage;
             XmlNode currentTaskResult = steController.GetTaskResult(k);
@@ -495,12 +579,51 @@ namespace STE
             one.Attributes["slot-id"].Value = slot_id;
 
         }
-        
-#endregion
-#region Create Task Results
-        
-#endregion
+
+        /// <summary>
+        /// При подъеме матча мы должны удалить запись о нём
+        /// </summary>
+        /// <param name="match_id"></param>
+        public void Match_Up(string match_id)
+        {
+            int k = steController.currentPage;
+            XmlNode currentTaskResult = steController.GetTaskResult(k);
+            XmlNode one = currentTaskResult.SelectSingleNode(String.Format("//*//*[@match-id='{0}']", match_id));
+            one.Attributes["slot-id"].Value = "empty";
+        }
+
+        /// <summary>
+        /// Срабатывает при выходе мыши за границы внешнего элемента
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void MathingFieldMouseLeave(object sender, MouseEventArgs e)
+        {
+            moving = false;
+        }
+
+        /// <summary>
+        /// Определяет, лежит ли правый верхний угол нашего объекта внутри данного слота
+        /// </summary>
+        /// <param name="panel"></param>
+        /// <returns></returns>
+        private bool IsSlotMatched(Panel panel)
+        {
+            double x = currentPanel.Margin.Left;
+            double y = currentPanel.Margin.Top;
+            double x1 = panel.Margin.Left;
+            double y1 = panel.Margin.Top;
+            double h1 = panel.Height;
+            double w1 = panel.Width;
+            Point p1 = Mouse.GetPosition(panel);
+            Point p2 = Mouse.GetPosition(currentPanel);
+            //double r = Math.Sqrt(Math.Pow((p1.X - p2.X), 2) + Math.Pow((p1.Y - p2.Y), 2));
+            return (x >= x1 && (x <= x1 + w1) && y >= y1 && y <= y1 + h1);
+            // return r < 100;
+        }
+
+       
 
     }
-   
+#endregion
 }
