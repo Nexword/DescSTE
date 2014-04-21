@@ -54,6 +54,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="STEController.cs" />
+    <Compile Include="STEDragDrop.cs" />
     <Compile Include="STEStorage.cs" />
     <Compile Include="STEWpfProcessor.cs" />
     <Compile Include="STEWindow.cs" />

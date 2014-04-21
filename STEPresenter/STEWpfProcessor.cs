@@ -8,6 +8,7 @@ using System.IO;
 using System.Xaml;
 using System.Windows;
 using System.Windows.Markup;
+using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Controls.Primitives;
@@ -161,7 +162,7 @@ namespace STE
                         //page += CreateMultipleSemiopenAnswerElement(child);
                         break;
                     case "matching-answer":
-                       // page += CreateMatchingAnswerElement(child);
+                          page.Children.Add(CreateMatchingAnswerElement(child));
                         break;
                 }
             }
@@ -315,10 +316,93 @@ namespace STE
         /// </summary>
         /// <param name="node">Узел в XML с соответствующим типом</param>
         /// <returns>Возвращаем описание вопроса в XAML</returns>
-        public string CreateMatchingAnswerElement(XmlNode node)
+        public StackPanel CreateMatchingAnswerElement(XmlNode node)
         {
-            string MatchingAnswerElement = "";
+            StackPanel MatchingAnswerElement=new StackPanel();
+            Grid gridPanel = new Grid();
+            Panel currentPanel;
+            STEDragDrop dragDrop=new STEDragDrop();
+            double d = 0;
+            double w = SystemParameters.PrimaryScreenWidth;
+
+
+            foreach (XmlNode slot in node.LastChild.ChildNodes)
+            {
+              
+                currentPanel=CreateSlotElement(slot);
+                double top = currentPanel.Margin.Top;
+                currentPanel.Margin = new Thickness(w-400, top + d, 0, 0);
+                dragDrop.slots.Add(currentPanel);
+                gridPanel.Children.Add(currentPanel);
+                d = d+105;
+            }
+
+            d = 0;
+            foreach (XmlNode match in node.FirstChild.ChildNodes)
+            {
+                currentPanel = CreateMatchElement(match, dragDrop);
+                double top = currentPanel.Margin.Top;
+                currentPanel.Margin = new Thickness(0, top + d, 0, 0);
+                gridPanel.Children.Add(currentPanel);
+                d += 105;
+               
+            }
+            gridPanel.MouseMove += dragDrop.MatchElementdMouseMove;
+            MatchingAnswerElement.Children.Add(gridPanel);
+            
             return MatchingAnswerElement;
+        }
+
+        private Panel CreateMatchElement(XmlNode match,STEDragDrop dragDrop)
+        {
+            Grid matchGrid = new Grid();
+            matchGrid.Height = 100;
+            matchGrid.Width = 200;
+            matchGrid.Background = Brushes.AliceBlue;
+            matchGrid.PreviewMouseDown += dragDrop.MatchElementMouseDown;
+            matchGrid.MouseUp += dragDrop.MatchElementMouseUp;
+            matchGrid.MouseMove += dragDrop.MatchElementdMouseMove;
+            ScrollViewer scroll=new ScrollViewer();
+            matchGrid.Children.Add(scroll);
+            
+            WrapPanel panel;
+            panel = CreateContentBlock(match);
+            matchGrid.HorizontalAlignment = HorizontalAlignment.Left;
+            matchGrid.VerticalAlignment = VerticalAlignment.Top;
+            matchGrid.Children.Add(panel);
+            
+            return matchGrid;
+        }
+
+        private Panel CreateSlotElement(XmlNode slot)
+        {
+            Grid slotElement = new Grid();
+            slotElement.Background = Brushes.Aquamarine;
+            slotElement.Height = 100;
+            slotElement.Width = 400;
+            slotElement.ShowGridLines = true;
+            ColumnDefinition col1 = new ColumnDefinition();
+            ColumnDefinition col2 = new ColumnDefinition();
+            slotElement.ColumnDefinitions.Add(col1);
+            slotElement.ColumnDefinitions.Add(col2);
+           
+            StackPanel slotArea = new StackPanel();
+            slotArea.Background = Brushes.AntiqueWhite;
+            slotArea.Width = 200;
+            slotArea.Height = 100;
+            WrapPanel contentArea = new WrapPanel();
+           
+            contentArea=CreateContentBlock(slot);
+            contentArea.Width = 200;
+            contentArea.Height = 100;
+            Grid.SetColumn(slotArea, 0);
+            Grid.SetColumn(contentArea, 1);
+            slotElement.Children.Add(slotArea);
+            slotElement.Children.Add(contentArea);
+            //slotElement.HorizontalAlignment = HorizontalAlignment.Left;
+            slotElement.VerticalAlignment = VerticalAlignment.Top;
+
+            return slotElement;
         }
 
         private void CreateRadioButton()
@@ -401,6 +485,15 @@ namespace STE
             XmlNode one = currentTaskResult.SelectSingleNode(String.Format("//*//*[@id='{0}']|//*//*[@match-id='{0}']", (sender as TextBox).Name));
             one.Attributes["value"].Value = (sender as TextBox).Text;
             //MessageBox.Show((sender as TextBox).Name);
+        }
+       
+        public void Match_Drop(string match_id,string slot_id)
+        {
+            int k = steController.currentPage;
+            XmlNode currentTaskResult = steController.GetTaskResult(k);
+            XmlNode one = currentTaskResult.SelectSingleNode(String.Format("//*//*[@match-id='{0}']", match_id));
+            one.Attributes["slot-id"].Value = slot_id;
+
         }
         
 #endregion

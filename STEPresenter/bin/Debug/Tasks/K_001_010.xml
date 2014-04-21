@@ -66,6 +66,13 @@
 					</text>
 				</content-block>
 			</option>
+			<option id='A_010_108'>
+				<content-block layout='typeA'>
+					<text id='T_046'>	
+						2) real
+					</text>
+				</content-block>
+			</option>
 			</slots>
 		</matching-answer>
 	</task>
