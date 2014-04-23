@@ -464,10 +464,7 @@ namespace STE
         /// <param name="e"></param>
         private void Checked_Button(object sender, RoutedEventArgs e)
         {
-            int k = steController.currentPage;
-            XmlNode currentTaskResult = steController.GetTaskResult(k);
-            XmlNode one = currentTaskResult.SelectSingleNode(String.Format("//*//*[@id='{0}']|//*//*[@match-id='{0}']", (sender as ToggleButton).Name));
-            one.Attributes["selected"].Value = "true";
+            steController.Checked_Unchecked_Button(sender, true);
         }
         /// <summary>
         /// В основном нужно для RadioButton, так как она имеет свойство выключаться при переключении.
@@ -476,10 +473,7 @@ namespace STE
         /// <param name="e"></param>
         private void Unchecked_Button(object sender, RoutedEventArgs e)
         {
-            int k = steController.currentPage;
-            XmlNode currentTaskResult = steController.GetTaskResult(k);
-            XmlNode one = currentTaskResult.SelectSingleNode(String.Format("//*//*[@id='{0}']|//*//*[@match-id='{0}']", (sender as ToggleButton).Name));
-            one.Attributes["selected"].Value = "false";
+            steController.Checked_Unchecked_Button(sender, false);
 
         }
         /// <summary>
@@ -489,15 +483,11 @@ namespace STE
         /// <param name="e"></param>
         private void Text_Changed(object sender, RoutedEventArgs e)
         {
-            int k = steController.currentPage;
-            XmlNode currentTaskResult = steController.GetTaskResult(k);
-            XmlNode one = currentTaskResult.SelectSingleNode(String.Format("//*//*[@id='{0}']|//*//*[@match-id='{0}']", (sender as TextBox).Name));
-            one.Attributes["value"].Value = (sender as TextBox).Text;
-            //MessageBox.Show((sender as TextBox).Name);
+            steController.Text_Changed(sender);
+            
         }
 
      
-        
 #endregion
 #region Create Task Results
         
@@ -573,10 +563,8 @@ namespace STE
         /// <param name="slot_id"></param>
         public void Match_Drop(string match_id, string slot_id)
         {
-            int k = steController.currentPage;
-            XmlNode currentTaskResult = steController.GetTaskResult(k);
-            XmlNode one = currentTaskResult.SelectSingleNode(String.Format("//*//*[@match-id='{0}']", match_id));
-            one.Attributes["slot-id"].Value = slot_id;
+            steController.Match_Drop_Up(match_id, slot_id);
+           
 
         }
 
@@ -586,10 +574,7 @@ namespace STE
         /// <param name="match_id"></param>
         public void Match_Up(string match_id)
         {
-            int k = steController.currentPage;
-            XmlNode currentTaskResult = steController.GetTaskResult(k);
-            XmlNode one = currentTaskResult.SelectSingleNode(String.Format("//*//*[@match-id='{0}']", match_id));
-            one.Attributes["slot-id"].Value = "empty";
+            steController.Match_Drop_Up(match_id, "false");
         }
 
         /// <summary>

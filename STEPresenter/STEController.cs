@@ -7,6 +7,9 @@ using System.Xml;
 using System.Windows;
 using System.Windows.Controls;
 using System.IO;
+using System.Windows.Markup;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 namespace STE
 {
     public class STEController
@@ -101,6 +104,39 @@ namespace STE
                 writer.Close();
             }
         }
+
+        public void Checked_Unchecked_Button(object sender,bool flag)
+        {
+            int k =currentPage;
+            
+            XmlNode currentTaskResult = GetTaskResult(k);
+            XmlNode one = currentTaskResult.SelectSingleNode(String.Format("//*//*[@id='{0}']|//*//*[@match-id='{0}']", (sender as ToggleButton).Name));
+            if (flag)
+                one.Attributes["selected"].Value = "true";
+            else one.Attributes["selected"].Value = "false";
+        
+
+        }
+
+    
+        public void Text_Changed(object sender)
+        {
+            int k = this.currentPage;
+            XmlNode currentTaskResult = this.GetTaskResult(k);
+            XmlNode one = currentTaskResult.SelectSingleNode(String.Format("//*//*[@id='{0}']|//*//*[@match-id='{0}']", (sender as TextBox).Name));
+            one.Attributes["value"].Value = (sender as TextBox).Text;
+        }
+
+        public void Match_Drop_Up(string match_id,string slot_id)
+        {
+            int k =this.currentPage;
+            XmlNode currentTaskResult = this.GetTaskResult(k);
+            XmlNode one = currentTaskResult.SelectSingleNode(String.Format("//*//*[@match-id='{0}']", match_id));
+            one.Attributes["slot-id"].Value = slot_id;
+           
+        }
+
+   
 
         
         
